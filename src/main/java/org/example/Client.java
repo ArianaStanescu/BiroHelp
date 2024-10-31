@@ -121,42 +121,16 @@ class Client implements Runnable {
         return ownedDocuments.contains(doc);
     }
 
-
-
-    protected void requestDocument(Document document) throws InterruptedException {
-        Deque<Document> reverseOrder = new ArrayDeque<>(); // Coada inversata de documente - ne asiguram ca documentele necesare sunt obtinute in ordinea corecta
-        buildReverseDocumentList(document, reverseOrder, new HashSet<>()); // Construim lista inversata
-
-        while (!reverseOrder.isEmpty()) {
-            Document currentDoc = reverseOrder.poll(); // Scoatem primul document de la coada
-            if (ownsDocument(currentDoc)) {
-                continue; // Daca clientul deține deja documentul trece la urmatorul
-            }
-
-            // Verificam daca vreun birou poate elibera documentul curent
-            for (Office office : offices) {
-                if (office.canIssueDocument(currentDoc)) { // Daca biroul poate elibera documentul
-                    System.out.println(name + " cere documentul " + currentDoc.getName() + " la biroul " + office.getName());
-                    office.addClient(this); // Adauga clientul in coada biroului
-                    ownedDocuments.add(currentDoc); // Adauga documentul la lista de documente deținute
-                    break;
-                }
-            }
-        }
+    protected void addOwnedDocument(Document doc) {
+        ownedDocuments.add(doc);
     }
 
-    // Metoda recursiva care construiește lista de documente in ordine inversata
-    private void buildReverseDocumentList(Document document, Deque<Document> reverseOrder, Set<Document> visited) {
-        if (visited.contains(document)) {
-            return; // Evitam recursivitatea infinita
-        }
-        visited.add(document);
+    protected List<Office> getOffices() {
+        return offices;
+    }
 
-        for (Document dep : document.getNecessaryDocuments()) {
-            buildReverseDocumentList(dep, reverseOrder, visited); // Apel recursiv pentru fiecare document necesar
-        }
-
-        reverseOrder.add(document); // Se adauga doc curent la finalul listei si se incepe cu documentul cel mai de baza
+    public Document getRequestedDocument() {
+        return requestedDocument;
     }
 
 
