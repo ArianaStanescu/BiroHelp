@@ -1,0 +1,32 @@
+{
+  "documents": {
+    "Chitanta" : [],
+    "Certificat de Nastere": ["Chitanta"],
+    "Certificat de Casatorie": ["Buletin"],
+    "Buletin": ["Certificat de Nastere"],
+    "Pasaport": ["Buletin"],
+    "Permis de Conducere": ["Buletin"]
+  },
+  "offices": {
+    "Stare Civila": {
+      "counters": ["Ghiseu 1 Stare Civila", "Ghiseu 2 Stare Civila", "Ghiseu 3 Stare Civila", "Ghiseu 4 Stare Civila"],
+      "documents": ["Certificat de Nastere", "Certificat de Casatorie"]
+    },
+    "Imigrari": {
+      "counters": ["Ghiseu 1 Imigrari", "Ghiseu 2 Imigrari"],
+      "documents": ["Pasaport"]
+    },
+    "Evidenta" : {
+      "counters" : ["Ghiseu 1 Evidenta", "Ghiseu 2 Evidenta"],
+      "documents" : ["Buletin"]
+    },
+    "Taxe si Impozite" : {
+      "counters" : ["Ghiseu 1 Taxe", "Ghiseu 2 Taxe"],
+      "documents" : ["Chitanta"]
+    },
+    "Auto" : {
+      "counters" : ["Ghiseu 1 Auto"],
+      "documents" : ["Permis de Conducere"]
+    }
+  }
+}
