@@ -84,18 +84,19 @@ class BureaucraticServer {
         reverseOrder.add(document);
     }
 
-    public void processDocumentRequest(Client client, Document document) {
-        try {
-            System.out.println("Serverul proceseaza cererea pentru " + document.getName() + " de la: " + client.getName());
+    public void processDocumentRequest(Client client, List<Document> documents) {
+        for(Document document : documents) {
+            try {
 
-            // Clientul cere documentele necesare
-            requestDocument(client, document);
+                System.out.println("Serverul proceseaza cererea pentru " + document.getName() + " de la: " + client.getName());
+                // Clientul cere documentele necesare
+                requestDocument(client, document);
 
-            //Thread.sleep(2000); // Simulează timpul necesar procesării
-            System.out.println("Cererea este procesata pentru " + document.getName() + " de la: " + client.getName());
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt(); // Restaurează starea de întrerupere
-            System.err.println("Cererea a fost intrerupta pentru " + document.getName() + " de la: " + client.getName());
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt(); // Restaurează starea de întrerupere
+                System.err.println("Cererea a fost intrerupta pentru " + document.getName() + " de la: " + client.getName());
+            }
         }
+
     }
 }
