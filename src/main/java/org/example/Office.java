@@ -28,7 +28,6 @@ class Office {
         documentTypesThatCanBeIssued.add(document);
     }
 
-
     protected void processClients() throws InterruptedException {
         Client client = waitingClients.take(); //ia urmatorul client din coada
         boolean processed = false;
