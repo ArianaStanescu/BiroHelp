@@ -131,7 +131,10 @@ class Client implements Runnable {
     protected void addOwnedDocument(Document doc) {
         doc.setClientId(clientId);
         ownedDocuments.add(doc);
-        System.out.println(name + " cu id-ul " + clientId + " a obtinut documentul intermediar " + doc.getName() + " cu id-ul " + doc.getClientId());
+        if(!requestedDocument.contains(doc)){
+            System.out.println(name + " cu id-ul " + clientId + " a obtinut documentul intermediar " + doc.getName() + " cu id-ul " + doc.getClientId());
+        }
+
     }
 
     public void run() {

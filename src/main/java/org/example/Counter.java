@@ -24,7 +24,7 @@ class Counter {
         System.out.println("Ghiseul " + name + " proceseaza clientul " + client.getName());
 
         //simulam timpul necesar procesarii
-        Thread.sleep(2000);
+        //Thread.sleep(2000);
         busy = false;
 
         //simulam pauza

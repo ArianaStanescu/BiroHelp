@@ -41,9 +41,9 @@ class Office {
                 }
             }
 
-            if (!processed) {
-                Thread.sleep(1000); //daca nu si-a gasit un ghiseu liber, mai incearca peste o secunda
-            }
+//            if (!processed) {
+//                Thread.sleep(1000); //daca nu si-a gasit un ghiseu liber, mai incearca peste o secunda
+//            }
         }
     }
 
