@@ -100,14 +100,14 @@ import java.util.*;
 class Client implements Runnable {
     private final String name;
     private final Document requestedDocument;
-    private final List<Document> ownedDocuments = new ArrayList<>();
-    //private final Set<Document> necessaryDocuments = new LinkedHashSet<>();
-    private final List<Office> offices;
+    private final List<Document> ownedDocuments;
 
-    public Client(String name, Document requestedDocument, List<Office> offices) {
+
+    public Client(String name, Document requestedDocument, List<Document> ownedDocuments) {
         this.name = name;
         this.requestedDocument = requestedDocument;
-        this.offices = offices;
+        this.ownedDocuments = ownedDocuments;
+
     }
 
     protected String getName() {
@@ -125,19 +125,8 @@ class Client implements Runnable {
         ownedDocuments.add(doc);
     }
 
-    protected List<Office> getOffices() {
-        return offices;
-    }
-
-    public Document getRequestedDocument() {
-        return requestedDocument;
-    }
-
-
-
     public void run() {
         BureaucraticServer server = BureaucraticServer.getInstance();
-        // Apelul la server se face acum în processDocumentRequest
         server.processDocumentRequest(this, requestedDocument);
         System.out.println(name + " a obtinut toate documentele necesare, inclusiv " + requestedDocument.getName());
     }
