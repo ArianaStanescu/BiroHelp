@@ -99,15 +99,22 @@ import java.util.*;
 
 class Client implements Runnable {
     private final String name;
-    private final Document requestedDocument;
+    private final List<Document> requestedDocument;
     private final List<Document> ownedDocuments;
+    private final int clientId;
 
-
-    public Client(String name, Document requestedDocument, List<Document> ownedDocuments) {
+    public Client(String name, List<Document> requestedDocument, List<Document> ownedDocuments) {
         this.name = name;
         this.requestedDocument = requestedDocument;
         this.ownedDocuments = ownedDocuments;
+        this.clientId = new Random().nextInt(1000);
+        linkDocumentsToClient();
+    }
 
+    private void linkDocumentsToClient() {
+        for (Document doc : ownedDocuments) {
+            doc.setClientId(clientId);
+        }
     }
 
     protected String getName() {
@@ -122,13 +129,18 @@ class Client implements Runnable {
     }
 
     protected void addOwnedDocument(Document doc) {
+        doc.setClientId(clientId);
         ownedDocuments.add(doc);
+        System.out.println(name + " cu id-ul " + clientId + " a obtinut documentul intermediar " + doc.getName() + " cu id-ul " + doc.getClientId());
     }
 
     public void run() {
         BureaucraticServer server = BureaucraticServer.getInstance();
         server.processDocumentRequest(this, requestedDocument);
-        System.out.println(name + " a obtinut toate documentele necesare, inclusiv " + requestedDocument.getName());
+        for(Document doc : requestedDocument){
+            System.out.println(name + " cu id-ul " + clientId + " a obtinut toate documentele necesare, inclusiv " + doc.getName() + " cu id-ul " + doc.getClientId());
+        }
+//        System.out.println(name + " a obtinut toate documentele necesare, inclusiv " + requestedDocument.getName());
     }
 
 
