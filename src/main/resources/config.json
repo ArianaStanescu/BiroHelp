@@ -44,6 +44,31 @@
       "name": "Client 3",
       "requestedDocuments": ["Permis de Conducere"],
       "ownedDocuments": []
+    },
+    {
+      "name": "Client 4",
+      "requestedDocuments": ["Certificat de Nastere"],
+      "ownedDocuments": ["Chitanta"]
+    },
+    {
+      "name": "Client 5",
+      "requestedDocuments": ["Pasaport", "Certificat de Casatorie"],
+      "ownedDocuments": ["Buletin"]
+    },
+    {
+      "name": "Client 6",
+      "requestedDocuments": ["Chitanta", "Permis de Conducere"],
+      "ownedDocuments": ["Certificat de Nastere", "Pasaport"]
+    },
+    {
+      "name": "Client 7",
+      "requestedDocuments": ["Certificat de Casatorie", "Permis de Conducere"],
+      "ownedDocuments": ["Buletin", "Chitanta"]
+    },
+    {
+      "name": "Client 8",
+      "requestedDocuments": ["Pasaport"],
+      "ownedDocuments": ["Certificat de Nastere", "Chitanta", "Buletin"]
     }
   ]
 }
