@@ -20,6 +20,7 @@ public class ConfigLoader {
 
     private Map<String, Document> documentMap = new HashMap<>();
     private List<Office> offices = new ArrayList<>();
+    private List<Client> clients = new ArrayList<>();
 
     public void loadConfig(String filePath) {
         JSONParser parser = new JSONParser();
@@ -70,6 +71,31 @@ public class ConfigLoader {
                 offices.add(office);
             }
 
+            // Load Clients
+            JSONArray clientsJson = (JSONArray) jsonObject.get("clients");
+            for (Object clientObj : clientsJson) {
+                JSONObject clientJson = (JSONObject) clientObj;
+                String clientName = (String) clientJson.get("name");
+
+                // Load owned documents
+                JSONArray ownedDocsJson = (JSONArray) clientJson.get("ownedDocuments");
+                List<Document> ownedDocuments = new ArrayList<>();
+                for (Object docNameObj : ownedDocsJson) {
+                    String docName = (String) docNameObj;
+                    ownedDocuments.add(documentMap.get(docName));
+                }
+
+                // Load requested documents
+                JSONArray requestedDocsJson = (JSONArray) clientJson.get("requestedDocuments");
+                List<Document> requestedDocuments = new ArrayList<>();
+                for (Object docNameObj : requestedDocsJson) {
+                    String docName = (String) docNameObj;
+                    requestedDocuments.add(documentMap.get(docName));
+                }
+
+                clients.add(new Client(clientName, requestedDocuments, ownedDocuments));
+            }
+
         } catch (IOException | ParseException e) {
             e.printStackTrace();
         }
@@ -81,5 +107,9 @@ public class ConfigLoader {
 
     public List<Office> getOffices() {
         return offices;
+    }
+
+    public List<Client> getClients() {
+        return clients;
     }
 }

@@ -28,5 +28,22 @@
       "counters" : ["Ghiseu 1 Auto"],
       "documents" : ["Permis de Conducere"]
     }
-  }
+  },
+  "clients": [
+    {
+      "name": "Client 1",
+      "requestedDocuments": ["Pasaport", "Permis de Conducere"],
+      "ownedDocuments": ["Certificat de Nastere", "Chitanta"]
+    },
+    {
+      "name": "Client 2",
+      "requestedDocuments": ["Certificat de Casatorie"],
+      "ownedDocuments": ["Certificat de Nastere"]
+    },
+    {
+      "name": "Client 3",
+      "requestedDocuments": ["Permis de Conducere"],
+      "ownedDocuments": []
+    }
+  ]
 }
