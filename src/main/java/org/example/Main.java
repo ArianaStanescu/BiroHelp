@@ -1,5 +1,10 @@
 package org.example;
 
+import org.example.entity.Client;
+import org.example.entity.Document;
+import org.example.entity.Office;
+import org.example.service.BureaucraticServer;
+
 import java.util.*;
 
 public class Main {
@@ -18,8 +23,8 @@ public class Main {
         server.loadOffices(birouri);
 
         //Start threads to process clients
-        for (Client client : clienti) {
-            new Thread(client).start();
-        }
+//        for (Client client : clienti) {
+//            new Thread(client).start();
+//        }
     }
 }

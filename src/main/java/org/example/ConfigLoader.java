@@ -8,13 +8,16 @@ import java.util.*;
 //!!!!!! MUST HAVE JSON-SIMPLE MODULE LOADED TO WORK !!!!!!!!!
 //!!!!!! CHECK POM.XML FILE FOR THIS DEPENDENCY !!!!!!!!!!!!!!
 
+import org.example.entity.Client;
+import org.example.entity.Counter;
+import org.example.entity.Document;
+import org.example.entity.Office;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-//!!!!!! MUST HAVE JSON-SIMPLE MODULE LOADED TO WORK !!!!!!!!!
-//!!!!!! CHECK POM.XML FILE FOR THIS DEPENDENCY !!!!!!!!!!!!!!
+
 
 public class ConfigLoader {
 
@@ -93,7 +96,7 @@ public class ConfigLoader {
                     requestedDocuments.add(documentMap.get(docName));
                 }
 
-                clients.add(new Client(clientName, requestedDocuments, ownedDocuments));
+                clients.add(new Client());
             }
 
         } catch (IOException | ParseException e) {

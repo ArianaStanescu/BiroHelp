@@ -1,43 +1,23 @@
-//package org.example;
-//
-//class BureaucraticServer {
-//    private static BureaucraticServer instance;
-//
-//    //private -> constructor ca sa fie singleton
-//    private BureaucraticServer() {}
-//
-//    public static synchronized BureaucraticServer getInstance() {
-//        if (instance == null) {
-//            instance = new BureaucraticServer();
-//        }
-//        return instance;
-//    }
-//
-//    public synchronized void processDocumentRequest(Client client, Document document) {
-//        System.out.println("Serverul proceseaza cererea pentru " + document.getName() + " de la : " + client.getName());
-//        try {
-//            Thread.sleep(2000); //simuleaza timpul necesar procesarii
-//        } catch (InterruptedException e) {
-//            Thread.currentThread().interrupt();
-//        }
-//        System.out.println("Cererea este procesata pentru " + document.getName() + " de la: " + client.getName());
-//    }
-//}
+package org.example.service;
 
-
-
-package org.example;
+import org.example.entity.Client;
+import org.example.entity.Document;
+import org.example.entity.Office;
+import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-class BureaucraticServer {
+@Service
+public class BureaucraticServer {
+
     private static BureaucraticServer instance;
     private List<Office> offices;
-//    private BureaucraticServer() {}
 
+    // Constructorul nu mai este necesar
     private BureaucraticServer() {
         offices = new ArrayList<>();
     }
+
     public static synchronized BureaucraticServer getInstance() {
         if (instance == null) {
             instance = new BureaucraticServer();
@@ -49,8 +29,7 @@ class BureaucraticServer {
         this.offices = offices;
     }
 
-
-    private void requestDocument(Client client, Document document) throws InterruptedException {
+    public void requestDocument(Client client, Document document) throws InterruptedException {
         Deque<Document> reverseOrder = new ArrayDeque<>();
         buildReverseDocumentList(document, reverseOrder, new HashSet<>());
 
@@ -87,16 +66,13 @@ class BureaucraticServer {
     public void processDocumentRequest(Client client, List<Document> documents) {
         for(Document document : documents) {
             try {
-
                 System.out.println("Serverul proceseaza cererea pentru " + document.getName() + " de la: " + client.getName());
                 // Clientul cere documentele necesare
                 requestDocument(client, document);
-
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt(); // Restaurează starea de întrerupere
                 System.err.println("Cererea a fost intrerupta pentru " + document.getName() + " de la: " + client.getName());
             }
         }
-
     }
 }
