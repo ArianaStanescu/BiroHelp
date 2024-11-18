@@ -25,10 +25,6 @@ public class Counter {
 
     private Random rand = new Random();
 
-    public Counter(String name) {
-        this.name = name;
-        this.clients = new ArrayList<>();
-    }
 
     public Counter() {}
 

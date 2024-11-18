@@ -16,23 +16,17 @@ public class Office {
     @OneToMany(mappedBy = "office", cascade = CascadeType.ALL)
     private List<Counter> counters;
 
-    @ManyToMany
-    @JoinTable(
-            name = "office_document",
-            joinColumns = @JoinColumn(name = "office_id"),
-            inverseJoinColumns = @JoinColumn(name = "document_id")
-    )
+
+    @OneToMany(mappedBy = "issuingOffice", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<Document> documentTypesThatCanBeIssued = new ArrayList<>();
 
-    @OneToMany(mappedBy = "office")
-    private final List<Client> clients = new ArrayList<>();
+
+//    @OneToMany(mappedBy = "office")
+//    private final List<Client> clients = new ArrayList<>();
 
     @Transient
     private final BlockingQueue<Client> waitingClients = new LinkedBlockingQueue<>();
 
-    public Office(String name) {
-        this.name = name;
-    }
 
     public Office() {}
 

@@ -3,6 +3,7 @@ package org.example.entity;
 import jakarta.persistence.*;
 import java.util.List;
 
+
 @Entity
 public class Client {
 
@@ -44,15 +45,7 @@ public class Client {
     @JoinColumn(name = "office_id")
     private Office office;
 
-    // No-argument constructor
-    public Client() {
-    }
-
-    public Client(String name, List<Document> requestedDocument, List<Document> ownedDocuments) {
-        this.name = name;
-        this.requestedDocument = requestedDocument;
-        this.ownedDocuments = ownedDocuments;
-    }
+    public Client() {}
 
     public Long getId() {
         return id;
@@ -60,6 +53,10 @@ public class Client {
 
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public synchronized boolean ownsDocument(Document doc) {

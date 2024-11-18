@@ -19,15 +19,18 @@ public class Document {
             joinColumns = @JoinColumn(name = "document_id"),
             inverseJoinColumns = @JoinColumn(name = "dependency_id")
     )
+
     private List<Document> necessaryDocuments = new ArrayList<>();
 
-    public Document(String name) {
-        this.name = name;
-    }
+    @ManyToOne
+    @JoinColumn(name = "office_id", nullable = false)
+    private Office issuingOffice;
+
+
 
     public Document() {}
 
-    // Getters și setters
+
     public Long getId() {
         return id;
     }
