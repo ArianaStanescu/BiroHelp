@@ -6,7 +6,6 @@ import java.util.List;
 
 @Entity
 public class Document {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -19,11 +18,10 @@ public class Document {
             joinColumns = @JoinColumn(name = "document_id"),
             inverseJoinColumns = @JoinColumn(name = "dependency_id")
     )
-
     private List<Document> necessaryDocuments = new ArrayList<>();
 
     @ManyToOne
-    @JoinColumn(name = "office_id", nullable = false)
+    @JoinColumn(name = "office_id", nullable = true)
     private Office issuingOffice;
 
 

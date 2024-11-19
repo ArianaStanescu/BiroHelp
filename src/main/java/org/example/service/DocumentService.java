@@ -1,6 +1,7 @@
 package org.example.service;
 
 import org.example.entity.Document;
+import org.example.entity.Office;
 import org.example.repositories.DocumentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,4 +38,22 @@ public class DocumentService {
     public void delete(Long id) {
         documentRepository.deleteById(id);
     }
+
+//    // Metodă pentru a crea un document cu un birou emis
+//    public Document createDocumentWithOffice(Long officeId, String documentName) {
+//        // Crează documentul
+//        Document document = new Document();
+//        document.setName(documentName);
+//
+//        // Obține biroul emis (verifică dacă există)
+//        Office office = officeRepository.findById(officeId)
+//                .orElseThrow(() -> new RuntimeException("Office not found"));
+//
+//        // Setează biroul emis în document
+//        document.setIssuingOffice(office);
+//
+//        // Salvează documentul în repo
+//        return documentRepository.save(document);
+//    }
+
 }

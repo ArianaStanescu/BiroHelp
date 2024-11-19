@@ -12,8 +12,16 @@ public class Counter {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "counter", cascade = CascadeType.ALL)
-    private List<Client> clients;
+//    @OneToMany(mappedBy = "counter", cascade = CascadeType.ALL)
+//    private List<Client> clients;
+
+    @ManyToMany
+    @JoinTable(
+            name = "client_counter",
+            joinColumns = @JoinColumn(name = "counter_id"),
+            inverseJoinColumns = @JoinColumn(name = "client_id")
+    )
+    private List<Client> clients = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "office_id")

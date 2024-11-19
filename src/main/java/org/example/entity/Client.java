@@ -37,13 +37,13 @@ public class Client {
     )
     private List<Counter> counters;
 
-    @ManyToOne
-    @JoinColumn(name = "counter_id")
-    private Counter counter;
-
-    @ManyToOne
-    @JoinColumn(name = "office_id")
-    private Office office;
+//    @ManyToOne
+//    @JoinColumn(name = "counter_id")
+//    private Counter counter;
+//
+//    @ManyToOne
+//    @JoinColumn(name = "office_id")
+//    private Office office;
 
     public Client() {}
 
