@@ -1,6 +1,8 @@
 package org.example.controller;
 
+import org.example.dto.DocumentCreateDto;
 import org.example.entity.Document;
+import org.example.mapper.DocumentMapper;
 import org.example.service.DocumentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,6 +14,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/documents")
 public class DocumentController {
+
+    @Autowired
+    private DocumentMapper documentMapper;
 
     @Autowired
     private DocumentService documentService;
@@ -31,10 +36,18 @@ public class DocumentController {
     }
 
     // Salvează un document nou
-    @PostMapping
-    public ResponseEntity<Document> createDocument(@RequestBody Document document) {
-        Document savedDocument = documentService.save(document);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedDocument);
+    @PostMapping("/{officeId}")
+    public ResponseEntity<DocumentCreateDto> createDocument(@PathVariable Long officeId, @RequestBody DocumentCreateDto documentCreateDto) {
+        Document documentToCreate = documentMapper.mapDocumentCreateDtoToDocument(documentCreateDto);
+        Document savedDocument = documentService.save(documentToCreate, officeId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(documentMapper.mapDocumentToDocumentCreateDto(savedDocument));
+    }
+
+    //adauga documentele necesare la document
+    @PutMapping("/dependencies/{id}")
+    public ResponseEntity<?> addDependentDocuments(@PathVariable Long id, @RequestBody List<Long> documentIds) {
+         documentService.addDependentDocuments(id, documentIds);
+        return ResponseEntity.noContent().build();
     }
 
     // Actualizează un document

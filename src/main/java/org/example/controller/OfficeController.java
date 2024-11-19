@@ -1,6 +1,8 @@
 package org.example.controller;
 
+import org.example.dto.OfficeDto;
 import org.example.entity.Office;
+import org.example.mapper.OfficeMapper;
 import org.example.service.OfficeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,6 +14,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/offices")
 public class OfficeController {
+
+    @Autowired
+    private OfficeMapper officeMapper;
 
     @Autowired
     private OfficeService officeService;
@@ -32,9 +37,10 @@ public class OfficeController {
 
     // Salvează un birou nou
     @PostMapping
-    public ResponseEntity<Office> createOffice(@RequestBody Office office) {
-        Office savedOffice = officeService.save(office);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedOffice);
+    public ResponseEntity<OfficeDto> createOffice(@RequestBody OfficeDto officeDto) {
+        Office officeToCreate = officeMapper.mapOfficeDtoToOffice(officeDto);
+        Office savedOffice = officeService.save(officeToCreate);
+        return ResponseEntity.status(HttpStatus.CREATED).body(officeMapper.mapOfficeToOfficeDto(savedOffice));
     }
 
     // Actualizează un birou

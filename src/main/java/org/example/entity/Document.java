@@ -21,7 +21,7 @@ public class Document {
     private List<Document> necessaryDocuments = new ArrayList<>();
 
     @ManyToOne
-    @JoinColumn(name = "office_id", nullable = true)
+    @JoinColumn(name = "office_id", nullable = false)
     private Office issuingOffice;
 
 
@@ -51,5 +51,17 @@ public class Document {
 
     public void addDependency(Document document) {
         this.necessaryDocuments.add(document);
+    }
+
+    public void setNecessaryDocuments(List<Document> necessaryDocuments) {
+        this.necessaryDocuments = necessaryDocuments;
+    }
+
+    public Office getIssuingOffice() {
+        return issuingOffice;
+    }
+
+    public void setIssuingOffice(Office issuingOffice) {
+        this.issuingOffice = issuingOffice;
     }
 }

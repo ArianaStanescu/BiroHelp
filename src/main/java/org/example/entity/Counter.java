@@ -15,13 +15,13 @@ public class Counter {
 //    @OneToMany(mappedBy = "counter", cascade = CascadeType.ALL)
 //    private List<Client> clients;
 
-    @ManyToMany
-    @JoinTable(
-            name = "client_counter",
-            joinColumns = @JoinColumn(name = "counter_id"),
-            inverseJoinColumns = @JoinColumn(name = "client_id")
-    )
-    private List<Client> clients = new ArrayList<>();
+//    @ManyToMany
+//    @JoinTable(
+//            name = "client_counter",
+//            joinColumns = @JoinColumn(name = "counter_id"),
+//            inverseJoinColumns = @JoinColumn(name = "client_id")
+//    )
+//    private List<Client> clients = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "office_id")
@@ -40,16 +40,36 @@ public class Counter {
         return id;
     }
 
+    public Office getOffice() {
+        return office;
+    }
+
+    public void setOffice(Office office) {
+        this.office = office;
+    }
+
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public boolean isBusy() {
         return busy;
     }
 
+    public void setBusy(boolean busy) {
+        this.busy = busy;
+    }
+
     public boolean isOnBreak() {
         return onBreak;
+    }
+
+    public void setOnBreak(boolean onBreak) {
+        this.onBreak = onBreak;
     }
 
     public synchronized void processClient(Client client) throws InterruptedException {
@@ -83,13 +103,13 @@ public class Counter {
         notifyAll();
     }
 
-    public void addClient(Client client) {
-        this.clients.add(client);
-    }
-
-    public void removeClient(Client client) {
-        this.clients.remove(client);
-    }
+//    public void addClient(Client client) {
+//        this.clients.add(client);
+//    }
+//
+//    public void removeClient(Client client) {
+//        this.clients.remove(client);
+//    }
 
     public void setId(Long id) {
         this.id = id;

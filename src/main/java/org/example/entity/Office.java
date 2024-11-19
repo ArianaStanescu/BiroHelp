@@ -35,6 +35,22 @@ public class Office {
         return name;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public List<Counter> getCounters() {
+        return counters;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setCounters(List<Counter> counters) {
+        this.counters = counters;
+    }
+
     public boolean canIssueDocument(Document document) {
         return documentTypesThatCanBeIssued.contains(document);
     }
@@ -45,6 +61,7 @@ public class Office {
 
     public void addDocuments(Document document) {
         documentTypesThatCanBeIssued.add(document);
+        document.setIssuingOffice(this);
     }
 
     protected void processClients() throws InterruptedException {

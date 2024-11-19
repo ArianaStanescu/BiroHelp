@@ -29,13 +29,15 @@ public class Client {
     )
     private List<Document> ownedDocuments;
 
-    @ManyToMany
-    @JoinTable(
-            name = "client_counter",
-            joinColumns = @JoinColumn(name = "client_id"),
-            inverseJoinColumns = @JoinColumn(name = "counter_id")
-    )
-    private List<Counter> counters;
+//    @ManyToMany
+//    @JoinTable(
+//            name = "client_counter",
+//            joinColumns = @JoinColumn(name = "client_id"),
+//            inverseJoinColumns = @JoinColumn(name = "counter_id")
+//    )
+//    private List<Counter> counters;
+
+
 
 //    @ManyToOne
 //    @JoinColumn(name = "counter_id")
