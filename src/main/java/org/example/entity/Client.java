@@ -61,6 +61,22 @@ public class Client {
         this.name = name;
     }
 
+    public List<Document> getOwnedDocuments() {
+        return ownedDocuments;
+    }
+
+    public void setOwnedDocuments(List<Document> ownedDocuments) {
+        this.ownedDocuments = ownedDocuments;
+    }
+
+    public List<Document> getRequestedDocument() {
+        return requestedDocument;
+    }
+
+    public void setRequestedDocument(List<Document> requestedDocument) {
+        this.requestedDocument = requestedDocument;
+    }
+
     public synchronized boolean ownsDocument(Document doc) {
         return ownedDocuments.contains(doc);
     }
