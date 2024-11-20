@@ -29,4 +29,8 @@ public class ClientService {
         client.setRequestedDocument(requestedDocuments);
         return clientRepository.save(client);
     }
+
+    public Client getById(Long userId) {
+        return clientRepository.findById(userId).orElse(null);
+    }
 }

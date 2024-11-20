@@ -1,5 +1,6 @@
 package org.example.mapper;
 
+import org.example.commands.CreateUserRequestCommand;
 import org.example.dto.ClientCreateDto;
 import org.example.dto.ClientDto;
 import org.example.entity.Client;
@@ -27,5 +28,14 @@ public class ClientMapper {
         Client client = new Client();
         client.setName(clientCreateDto.getName());
         return client;
+    }
+
+    public CreateUserRequestCommand mapClientToCreateUserRequestCommand(Client client) {
+        CreateUserRequestCommand createUserRequestCommand = new CreateUserRequestCommand();
+        createUserRequestCommand.setId(client.getId());
+        createUserRequestCommand.setName(client.getName());
+        createUserRequestCommand.setRequestedDocuments(client.getRequestedDocument());
+        createUserRequestCommand.setOwnedDocuments(client.getOwnedDocuments());
+        return createUserRequestCommand;
     }
 }
