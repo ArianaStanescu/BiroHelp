@@ -28,9 +28,12 @@ public class Counter {
     private Office office;
 
     private String name;
+    @Transient
     private boolean busy = false;
+    @Transient
     private boolean onBreak = false;
 
+    @Transient
     private Random rand = new Random();
 
 

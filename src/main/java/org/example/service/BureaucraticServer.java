@@ -21,9 +21,12 @@ public class BureaucraticServer {
         Deque<Document> reverseOrder = new ArrayDeque<>();
         buildReverseDocumentList(document, reverseOrder, new HashSet<>());
 
+
         while (!reverseOrder.isEmpty()) {
             Document currentDoc = reverseOrder.poll();
+
             if (client.ownsDocument(currentDoc)) {
+                System.out.println("Client already owns document: " + currentDoc.getName());
                 continue;
             }
 

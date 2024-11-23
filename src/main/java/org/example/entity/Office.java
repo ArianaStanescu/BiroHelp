@@ -57,7 +57,7 @@ public class Office {
 
 
     public boolean canIssueDocument(Document document) {
-        return documentTypesThatCanBeIssued.contains(document);
+        return this.id.equals(document.getIssuingOffice().getId());
     }
 
     public void addCounter(Counter counter) {
