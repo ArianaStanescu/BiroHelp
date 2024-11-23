@@ -3,8 +3,6 @@ package org.example.controller;
 import org.example.commands.CreateUserRequestCommand;
 import org.example.dto.ClientCreateDto;
 import org.example.dto.ClientDto;
-import org.example.dto.DocumentCreateDto;
-import org.example.dto.DocumentDto;
 import org.example.entity.Client;
 import org.example.entity.Document;
 import org.example.mapper.ClientMapper;
@@ -73,7 +71,7 @@ public class ClientController {
             Map<String, Object> response = new HashMap<>();
             response.put("status", "CreateUserRequestCommand sent to queue");
             response.put("name", command.getName());
-            List<String> documentNames = command.getRequestedDocuments().stream()
+            List<String> documentNames = client.getRequestedDocument().stream()
                     .map(Document::getName)
                     .collect(Collectors.toList());
             response.put("requestedDocuments", documentNames);
@@ -84,12 +82,6 @@ public class ClientController {
         }
     }
 
-    //   @PatchMapping
-//    public Client updateClient(@RequestBody Client client, @RequestBody Document document) {
-//        //server.requestDocument(client, document);
-//        //return clientService.updateClient(client);
-//    }
-}
     @PatchMapping("/{id}")
     public ResponseEntity<ClientCreateDto> updateClientName(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
         Optional<Client> updatedClient = clientService.updateClientName(id, updates);

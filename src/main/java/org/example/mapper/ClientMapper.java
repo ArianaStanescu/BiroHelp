@@ -40,8 +40,6 @@ public class ClientMapper {
         CreateUserRequestCommand createUserRequestCommand = new CreateUserRequestCommand();
         createUserRequestCommand.setId(client.getId());
         createUserRequestCommand.setName(client.getName());
-        createUserRequestCommand.setRequestedDocuments(client.getRequestedDocument());
-        createUserRequestCommand.setOwnedDocuments(client.getOwnedDocuments());
         return createUserRequestCommand;
     }
 }

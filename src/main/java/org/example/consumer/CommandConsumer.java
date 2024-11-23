@@ -52,12 +52,12 @@ public class CommandConsumer {
         Long clientId = command.getId();
         Client client = clientService.getById(clientId);
         if (client != null) {
-            System.out.println("User with name " + command.getName() + ": requested documents: " + command.getRequestedDocuments() + ", owned documents: " + command.getOwnedDocuments());
-            List<String> ownedDocumentNames = command.getOwnedDocuments().stream()
+            System.out.println("User with name " + command.getName() + ": requested documents: " + client.getRequestedDocument() + ", owned documents: " + client.getOwnedDocuments());
+            List<String> ownedDocumentNames = client.getOwnedDocuments().stream()
                     .map(Document::getName)
                     .collect(Collectors.toList());
             System.out.println("Owned documents: " + ownedDocumentNames);
-            List<String> requestedDocumentNames = command.getRequestedDocuments().stream()
+            List<String> requestedDocumentNames = client.getRequestedDocument().stream()
                     .map(Document::getName)
                     .collect(Collectors.toList());
             System.out.println("Requested documents: " + requestedDocumentNames);
