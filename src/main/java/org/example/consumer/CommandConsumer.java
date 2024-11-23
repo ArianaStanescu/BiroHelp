@@ -48,13 +48,12 @@ public class CommandConsumer {
     }
 
     private void createUserRequestCommand(CreateUserRequestCommand command) {
-//        System.out.println("RMQ Consumer - Create user: " + command.getUsername() + ", email: " + command.getEmail());
 
         Long clientId = command.getId();
         Client client = clientService.getById(clientId);
         if (client != null) {
             System.out.println("User with name " + command.getName() + ": requested documents: " + command.getRequestedDocuments() + ", owned documents: " + command.getOwnedDocuments());
-            List<String> ownedDocumentNames = command.getRequestedDocuments().stream()
+            List<String> ownedDocumentNames = command.getOwnedDocuments().stream()
                     .map(Document::getName)
                     .collect(Collectors.toList());
             System.out.println("Owned documents: " + ownedDocumentNames);
