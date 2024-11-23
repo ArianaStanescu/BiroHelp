@@ -5,7 +5,6 @@ import org.example.commands.CreateUserRequestCommand;
 import org.example.entity.Client;
 import org.example.entity.Document;
 import org.example.service.ClientService;
-import org.hibernate.Hibernate;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;
 
@@ -36,9 +35,7 @@ public class CommandConsumer {
 
             if ("CreateUserRequestCommand".equals(commandType)) {
                 CreateUserRequestCommand command = objectMapper.convertValue(data, CreateUserRequestCommand.class);
-                createUserRequestCommand(command);
-//                System.out.println("inside CreateUserRequestCommand if");
-
+                consumeCreateUserRequestCommand(command);
             } else {
                 System.out.println("Unknown command type: " + commandType);
             }
@@ -47,7 +44,7 @@ public class CommandConsumer {
         }
     }
 
-    private void createUserRequestCommand(CreateUserRequestCommand command) {
+    private void consumeCreateUserRequestCommand(CreateUserRequestCommand command) {
 
         Long clientId = command.getId();
         Client client = clientService.getById(clientId);
