@@ -13,11 +13,11 @@ public class Office {
 
     private String name;
 
-    @OneToMany(mappedBy = "office", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "office", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private List<Counter> counters;
 
 
-    @OneToMany(mappedBy = "issuingOffice", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "issuingOffice", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private final List<Document> documentTypesThatCanBeIssued = new ArrayList<>();
 
 

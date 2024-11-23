@@ -1,5 +1,6 @@
 package org.example.service;
 
+import jakarta.transaction.Transactional;
 import org.example.entity.Client;
 import org.example.entity.Document;
 import org.example.repositories.ClientRepository;
@@ -106,4 +107,13 @@ public class ClientService {
         return Optional.empty();
     }
 
+
+    public Client updateClient(Client client) {
+        return clientRepository.save(client);
+    }
+
+    @Transactional
+    public Client getById(Long userId) {
+        return clientRepository.findById(userId).orElse(null);
+    }
 }
