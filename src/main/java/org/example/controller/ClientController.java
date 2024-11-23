@@ -3,6 +3,8 @@ package org.example.controller;
 import org.example.commands.CreateUserRequestCommand;
 import org.example.dto.ClientCreateDto;
 import org.example.dto.ClientDto;
+import org.example.dto.ClientUpdateDocumentsDto;
+import org.example.dto.ClientUpdateNameDto;
 import org.example.entity.Client;
 import org.example.entity.Document;
 import org.example.mapper.ClientMapper;
@@ -83,11 +85,12 @@ public class ClientController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<ClientCreateDto> updateClientName(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
-        Optional<Client> updatedClient = clientService.updateClientName(id, updates);
+    public ResponseEntity<ClientUpdateNameDto> updateClientName(@PathVariable Long id, @RequestBody ClientUpdateNameDto clientUpdateDto) {
+
+        Optional<Client> updatedClient = clientService.updateClientName(id, clientUpdateDto);
 
         if (updatedClient.isPresent()) {
-            return ResponseEntity.ok(clientMapper.mapClientToClientCreateDto(updatedClient.get()));
+            return ResponseEntity.ok(clientMapper.mapClientToClientUpdateNameDto(updatedClient.get()));
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(null);
@@ -95,11 +98,11 @@ public class ClientController {
     }
 
     @PatchMapping("/{id}/documents")
-    public ResponseEntity<ClientDto> updateClientDocuments(@PathVariable Long id, @RequestBody Map<String, List<Long>> updates) {
+    public ResponseEntity<ClientUpdateDocumentsDto> updateClientDocuments(@PathVariable Long id, @RequestBody ClientUpdateDocumentsDto updates) {
         Optional<Client> updatedClient = clientService.partialUpdateDocuments(id, updates);
 
         if (updatedClient.isPresent()) {
-            return ResponseEntity.ok(clientMapper.mapClientToClientDto(updatedClient.get()));
+            return ResponseEntity.ok(updates);
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }

@@ -5,6 +5,7 @@ import java.util.List;
 public class ClientDto {
     private Long id;
     private String name;
+    private String username;
     private List<DocumentCreateDto> requestedDocuments;
     private List<DocumentCreateDto> ownedDocuments;
 
@@ -22,6 +23,14 @@ public class ClientDto {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public List<DocumentCreateDto> getRequestedDocuments() {
