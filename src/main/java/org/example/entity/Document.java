@@ -12,7 +12,7 @@ public class Document {
 
     private String name;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "document_dependencies",
             joinColumns = @JoinColumn(name = "document_id"),

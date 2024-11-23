@@ -32,6 +32,17 @@ public class ClientController {
     @Autowired
     private CommandProducer commandProducer;
 
+    @GetMapping("/{id}")
+    public ResponseEntity<ClientDto> getClientById(@PathVariable Long id) {
+        Client client = clientService.getById(id);
+        if (client != null) {
+            ClientDto clientDto = clientMapper.mapClientToClientDto(client);
+            return ResponseEntity.ok(clientDto);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
+
     @GetMapping
     public List<Client> getClients() {
         return clientService.getAllClients();

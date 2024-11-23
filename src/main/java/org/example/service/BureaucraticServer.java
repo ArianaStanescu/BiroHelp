@@ -3,6 +3,7 @@ package org.example.service;
 import org.example.entity.Client;
 import org.example.entity.Document;
 import org.example.entity.Office;
+import org.example.repositories.OfficeRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -10,23 +11,10 @@ import java.util.*;
 @Service
 public class BureaucraticServer {
 
-    private static BureaucraticServer instance;
-    private List<Office> offices;
+    private final List<Office> offices;
 
-    // Constructorul nu mai este necesar
-    private BureaucraticServer() {
-        offices = new ArrayList<>();
-    }
-
-    public static synchronized BureaucraticServer getInstance() {
-        if (instance == null) {
-            instance = new BureaucraticServer();
-        }
-        return instance;
-    }
-
-    public void loadOffices(List<Office> offices) {
-        this.offices = offices;
+    public BureaucraticServer(OfficeRepository officeRepository) {
+        offices = officeRepository.findAll();
     }
 
     public void requestDocument(Client client, Document document) throws InterruptedException {

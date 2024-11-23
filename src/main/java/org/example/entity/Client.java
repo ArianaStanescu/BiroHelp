@@ -1,11 +1,33 @@
 package org.example.entity;
 
 import jakarta.persistence.*;
+import org.example.repositories.ClientRepository;
+import org.example.service.BureaucraticServer;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import java.util.List;
 
 
 @Entity
-public class Client {
+@Component
+public class Client implements Runnable {
+
+    @Transient
+    private static BureaucraticServer bureaucraticServer;
+
+    @Transient
+    private static ClientRepository clientRepository;
+
+    @Autowired
+    public void setBureaucraticServer(BureaucraticServer bureaucraticServer) {
+        Client.bureaucraticServer = bureaucraticServer;
+    }
+
+    @Autowired
+    public void setClientRepository(ClientRepository clientRepository) {
+        Client.clientRepository = clientRepository;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -13,7 +35,7 @@ public class Client {
 
     private String name;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
             name = "client_requested_documents",
             joinColumns = @JoinColumn(name = "client_id"),
@@ -21,33 +43,13 @@ public class Client {
     )
     private List<Document> requestedDocument;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
             name = "client_owned_documents",
             joinColumns = @JoinColumn(name = "client_id"),
             inverseJoinColumns = @JoinColumn(name = "document_id")
     )
     private List<Document> ownedDocuments;
-
-//    @ManyToMany
-//    @JoinTable(
-//            name = "client_counter",
-//            joinColumns = @JoinColumn(name = "client_id"),
-//            inverseJoinColumns = @JoinColumn(name = "counter_id")
-//    )
-//    private List<Counter> counters;
-
-
-
-//    @ManyToOne
-//    @JoinColumn(name = "counter_id")
-//    private Counter counter;
-//
-//    @ManyToOne
-//    @JoinColumn(name = "office_id")
-//    private Office office;
-
-    public Client() {}
 
     public Long getId() {
         return id;
@@ -86,5 +88,21 @@ public class Client {
         if (!requestedDocument.contains(doc)) {
             System.out.println(name + " a obtinut documentul intermediar " + doc.getName());
         }
+    }
+
+    public void run() {
+        bureaucraticServer.processDocumentRequest(this, requestedDocument);
+        for (Document doc : requestedDocument) {
+            System.out.println(name + " cu id-ul " + id + " a obtinut toate documentele necesare, inclusiv " + doc.getName());
+        }
+        //update clients owned documents
+        this.requestedDocument.forEach(document -> {
+            if (!ownedDocuments.contains(document)) {
+                ownedDocuments.add(document);
+            }
+        });
+        this.requestedDocument.clear();
+        clientRepository.save(this);
+//        System.out.println(name + " a obtinut toate documentele necesare, inclusiv " + requestedDocument.getName());
     }
 }
