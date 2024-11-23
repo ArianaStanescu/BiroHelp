@@ -11,8 +11,8 @@ public class CounterMapper {
         CounterDto counterDto = new CounterDto();
         counterDto.setId(counter.getId());
         counterDto.setName(counter.getName());
-        counterDto.setBusy(counter.isBusy());
-        counterDto.setOnBreak(counter.isOnBreak());
+        //counterDto.setBusy(counter.isBusy());
+        //counterDto.setOnBreak(counter.isOnBreak());
         return counterDto;
     }
 
@@ -20,8 +20,8 @@ public class CounterMapper {
         Counter counter = new Counter();
         counter.setId(counterDto.getId());
         counter.setName(counterDto.getName());
-        counter.setBusy(counterDto.isBusy());
-        counter.setOnBreak(counterDto.isOnBreak());
+        //counter.setBusy(counterDto.isBusy());
+        //counter.setOnBreak(counterDto.isOnBreak());
         return counter;
     }
 }

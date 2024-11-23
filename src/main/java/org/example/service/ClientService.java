@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class ClientService {
@@ -18,7 +20,7 @@ public class ClientService {
     @Autowired
     private DocumentRepository documentRepository;
 
-    public List<Client> getAllClients() {
+    public List<Client> findAllClients() {
         return clientRepository.findAll();
     }
 
@@ -29,4 +31,79 @@ public class ClientService {
         client.setRequestedDocument(requestedDocuments);
         return clientRepository.save(client);
     }
+
+    public Optional<Client> findById(Long id) {
+        return clientRepository.findById(id);
+    }
+
+    public void deleteClient(Long id) {
+        Optional<Client> optionalClient = clientRepository.findById(id);
+
+        if (optionalClient.isPresent()) {
+            Client client = optionalClient.get();
+
+            client.getOwnedDocuments().clear();
+            client.getRequestedDocument().clear();
+
+            clientRepository.save(client);
+
+            clientRepository.delete(client);
+        } else {
+            throw new IllegalArgumentException("Client with id " + id + " not found.");
+        }
+    }
+
+
+    public Optional<Client> updateClientName(Long id, Map<String, Object> updates) {
+        Optional<Client> optionalClient = clientRepository.findById(id);
+
+        if (optionalClient.isPresent()) {
+            Client client = optionalClient.get();
+            boolean invalidField = false;
+
+            for (Map.Entry<String, Object> entry : updates.entrySet()) {
+                String key = entry.getKey();
+                Object value = entry.getValue();
+
+                if ("name".equals(key)) {
+                    client.setName((String) value);
+                } else {
+                    invalidField = true;
+                }
+            }
+
+            if (invalidField) {
+                return Optional.empty();
+            }
+
+            return Optional.of(clientRepository.save(client));
+        }
+
+        return Optional.empty();
+    }
+
+    public Optional<Client> partialUpdateDocuments(Long id, Map<String, List<Long>> updates) {
+        Optional<Client> optionalClient = clientRepository.findById(id);
+
+        if (optionalClient.isPresent()) {
+            Client client = optionalClient.get();
+
+            if (updates.containsKey("requestedDocuments")) {
+                List<Long> documentIds = updates.get("requestedDocuments");
+                List<Document> requestedDocuments = documentRepository.findAllById(documentIds);
+                client.setRequestedDocument(requestedDocuments);
+            }
+
+            if (updates.containsKey("ownedDocuments")) {
+                List<Long> documentIds = updates.get("ownedDocuments");
+                List<Document> ownedDocuments = documentRepository.findAllById(documentIds);
+                client.setOwnedDocuments(ownedDocuments);
+            }
+
+            return Optional.of(clientRepository.save(client));
+        }
+
+        return Optional.empty();
+    }
+
 }

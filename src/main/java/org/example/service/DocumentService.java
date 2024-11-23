@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -39,11 +40,31 @@ public class DocumentService {
         return document;
     }
 
-    public Optional<Document> update(Long id, Document document) {
-        if (documentRepository.existsById(id)) {
-            document.setId(id);
+    public Optional<Document> partialUpdate(Long id, Map<String, Object> updates) {
+        Optional<Document> optionalDocument = documentRepository.findById(id);
+
+        if (optionalDocument.isPresent()) {
+            Document document = optionalDocument.get();
+            boolean invalidField = false;
+
+            for (Map.Entry<String, Object> entry : updates.entrySet()) {
+                String key = entry.getKey();
+                Object value = entry.getValue();
+
+                if ("name".equals(key)) {
+                    document.setName((String) value);
+                } else {
+                    invalidField = true;
+                }
+            }
+
+            if (invalidField) {
+                return Optional.empty();
+            }
+
             return Optional.of(documentRepository.save(document));
         }
+
         return Optional.empty();
     }
 
@@ -54,9 +75,30 @@ public class DocumentService {
         documentRepository.save(document);
     }
 
-    public void delete(Long id) {
-        documentRepository.deleteById(id);
+    public void deleteDependentDocuments(Long id, List<Long> documentIds) {
+        Document document = documentRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Document not found"));
+        documentRepository.findAllById(documentIds).forEach(document::removeDependency);
+        documentRepository.save(document);
     }
+
+    public void delete(Long id) {
+        Optional<Document> optionalDocument = documentRepository.findById(id);
+
+        if (optionalDocument.isPresent()) {
+            Document documentToDelete = optionalDocument.get();
+
+            deleteDependentDocuments(id, documentToDelete.getNecessaryDocuments().stream()
+                    .map(Document::getId)
+                    .toList());
+
+            documentRepository.delete(documentToDelete);
+        }
+    }
+
+//    public void delete(Long id) {
+//        documentRepository.deleteById(id);
+//    }
 
 //    // Metodă pentru a crea un document cu un birou emis
 //    public Document createDocumentWithOffice(Long officeId, String documentName) {

@@ -3,8 +3,8 @@ package org.example.dto;
 public class CounterDto {
     private Long id;
     private String name;
-    private boolean busy = false;
-    private boolean onBreak = false;
+    //private boolean busy = false;
+    //private boolean onBreak = false;
 
     public Long getId() {
         return id;
@@ -22,19 +22,19 @@ public class CounterDto {
         this.name = name;
     }
 
-    public boolean isBusy() {
-        return busy;
-    }
-
-    public void setBusy(boolean busy) {
-        this.busy = busy;
-    }
-
-    public boolean isOnBreak() {
-        return onBreak;
-    }
-
-    public void setOnBreak(boolean onBreak) {
-        this.onBreak = onBreak;
-    }
+//    public boolean isBusy() {
+//        return busy;
+//    }
+//
+//    public void setBusy(boolean busy) {
+//        this.busy = busy;
+//    }
+//
+//    public boolean isOnBreak() {
+//        return onBreak;
+//    }
+//
+//    public void setOnBreak(boolean onBreak) {
+//        this.onBreak = onBreak;
+//    }
 }

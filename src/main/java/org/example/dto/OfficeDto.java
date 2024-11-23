@@ -5,7 +5,7 @@ import java.util.List;
 public class OfficeDto {
     private Long id;
     private String name;
-    private List<CounterDto> counters;
+    //private List<CounterDto> counters;
 //    private final List<Document> documentTypesThatCanBeIssued = new ArrayList<>();
 
     public Long getId() {
@@ -24,11 +24,11 @@ public class OfficeDto {
         this.name = name;
     }
 
-    public List<CounterDto> getCounters() {
-        return counters;
-    }
-
-    public void setCounters(List<CounterDto> counters) {
-        this.counters = counters;
-    }
+//    public List<CounterDto> getCounters() {
+//        return counters;
+//    }
+//
+//    public void setCounters(List<CounterDto> counters) {
+//        this.counters = counters;
+//    }
 }
