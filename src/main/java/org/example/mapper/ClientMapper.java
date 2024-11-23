@@ -28,4 +28,10 @@ public class ClientMapper {
         client.setName(clientCreateDto.getName());
         return client;
     }
+
+    public ClientCreateDto mapClientToClientCreateDto(Client client) {
+        ClientCreateDto clientCreateDto = new ClientCreateDto();
+        clientCreateDto.setName(client.getName());
+        return clientCreateDto;
+    }
 }

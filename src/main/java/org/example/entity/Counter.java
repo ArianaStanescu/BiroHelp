@@ -24,7 +24,7 @@ public class Counter {
 //    private List<Client> clients = new ArrayList<>();
 
     @ManyToOne
-    @JoinColumn(name = "office_id")
+    @JoinColumn(name = "office_id", nullable = false)
     private Office office;
 
     private String name;
