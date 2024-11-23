@@ -1,6 +1,7 @@
 package org.example.controller;
 
 import org.example.dto.OfficeDto;
+import org.example.dto.OfficeGetDto;
 import org.example.entity.Office;
 import org.example.mapper.OfficeMapper;
 import org.example.service.OfficeService;
@@ -10,6 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/offices")
@@ -21,21 +25,34 @@ public class OfficeController {
     @Autowired
     private OfficeService officeService;
 
-    // Obține toate birourile
+
     @GetMapping
-    public List<Office> getAllOffices() {
-        return officeService.findAllOffices();
+    public ResponseEntity<List<OfficeGetDto>> getAllOffices() {
+
+        List<Office> offices = officeService.findAllOffices();
+
+        List<OfficeGetDto> officeGetDtos = offices.stream()
+                .map(officeMapper::mapOfficeToOfficeGetDto)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(officeGetDtos);
     }
 
-    // Obține un birou după ID
+
     @GetMapping("/{id}")
-    public ResponseEntity<Office> getOfficeById(@PathVariable Long id) {
-        return officeService.findById(id)
-                .map(office -> ResponseEntity.ok(office))
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    public ResponseEntity<OfficeGetDto> getOfficeById(@PathVariable Long id) {
+
+        Office office = officeService.findById(id).orElse(null);
+
+        if (office != null) {
+            return ResponseEntity.ok(officeMapper.mapOfficeToOfficeGetDto(office));
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
     }
 
-    // Salvează un birou nou
+
     @PostMapping
     public ResponseEntity<OfficeDto> createOffice(@RequestBody OfficeDto officeDto) {
         Office officeToCreate = officeMapper.mapOfficeDtoToOffice(officeDto);
@@ -43,18 +60,25 @@ public class OfficeController {
         return ResponseEntity.status(HttpStatus.CREATED).body(officeMapper.mapOfficeToOfficeDto(savedOffice));
     }
 
-    // Actualizează un birou
-    @PutMapping("/{id}")
-    public ResponseEntity<Office> updateOffice(@PathVariable Long id, @RequestBody Office office) {
-        return officeService.update(id, office)
-                .map(updatedOffice -> ResponseEntity.ok(updatedOffice))
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<OfficeDto> partialUpdateOffice(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
+        Optional<Office> updatedOffice = officeService.partialUpdate(id, updates);
+
+        if (updatedOffice.isPresent()) {
+            return ResponseEntity.ok(officeMapper.mapOfficeToOfficeDto(updatedOffice.get()));
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(null);
+        }
     }
 
-    // Șterge un birou
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteOffice(@PathVariable Long id) {
         officeService.delete(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+
+
 }

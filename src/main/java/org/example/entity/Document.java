@@ -2,6 +2,7 @@ package org.example.entity;
 
 import jakarta.persistence.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -64,4 +65,9 @@ public class Document {
     public void setIssuingOffice(Office issuingOffice) {
         this.issuingOffice = issuingOffice;
     }
+
+    public void removeDependency(Document document) {
+        this.necessaryDocuments.remove(document);
+    }
+
 }

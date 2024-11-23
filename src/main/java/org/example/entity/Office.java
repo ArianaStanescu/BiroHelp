@@ -13,7 +13,7 @@ public class Office {
 
     private String name;
 
-    @OneToMany(mappedBy = "office", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "office", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private List<Counter> counters;
 
 
@@ -51,6 +51,11 @@ public class Office {
         this.counters = counters;
     }
 
+    public List<Document> getDocumentTypesThatCanBeIssued() {
+        return documentTypesThatCanBeIssued;
+    }
+
+
     public boolean canIssueDocument(Document document) {
         return documentTypesThatCanBeIssued.contains(document);
     }
@@ -86,5 +91,10 @@ public class Office {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public void addCounters(Counter counter) {
+        counters.add(counter);
+        counter.setOffice(this);
     }
 }

@@ -1,6 +1,7 @@
 package org.example.controller;
 
 import org.example.dto.DocumentCreateDto;
+import org.example.dto.DocumentDto;
 import org.example.entity.Document;
 import org.example.mapper.DocumentMapper;
 import org.example.service.DocumentService;
@@ -10,6 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/documents")
@@ -21,21 +25,32 @@ public class DocumentController {
     @Autowired
     private DocumentService documentService;
 
-    // Obține toate documentele
     @GetMapping
-    public List<Document> getAllDocuments() {
-        return documentService.findAllDocuments();
+    public ResponseEntity<List<DocumentDto>> getAllDocuments() {
+
+        List<Document> documents = documentService.findAllDocuments();
+
+        List<DocumentDto> DocumentCreateDtos = documents.stream()
+                .map(documentMapper::mapDocumentToDocumentDto)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(DocumentCreateDtos);
     }
 
-    // Obține un document după ID
+
     @GetMapping("/{id}")
-    public ResponseEntity<Document> getDocumentById(@PathVariable Long id) {
-        return documentService.findById(id)
-                .map(document -> ResponseEntity.ok(document))
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    public ResponseEntity<DocumentDto> getDocumentById(@PathVariable Long id) {
+
+        Document document = documentService.findById(id).orElse(null);
+
+        if (document != null) {
+            return ResponseEntity.ok(documentMapper.mapDocumentToDocumentDto(document));
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
-    // Salvează un document nou
+
     @PostMapping("/{officeId}")
     public ResponseEntity<DocumentCreateDto> createDocument(@PathVariable Long officeId, @RequestBody DocumentCreateDto documentCreateDto) {
         Document documentToCreate = documentMapper.mapDocumentCreateDtoToDocument(documentCreateDto);
@@ -50,18 +65,27 @@ public class DocumentController {
         return ResponseEntity.noContent().build();
     }
 
-    // Actualizează un document
-    @PutMapping("/{id}")
-    public ResponseEntity<Document> updateDocument(@PathVariable Long id, @RequestBody Document document) {
-        return documentService.update(id, document)
-                .map(updatedDocument -> ResponseEntity.ok(updatedDocument))
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    @PatchMapping("/{id}")
+    public ResponseEntity<DocumentCreateDto> partialUpdateDocument(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
+        Optional<Document> updatedDocument = documentService.partialUpdate(id, updates);
+
+        if (updatedDocument.isPresent()) {
+            return ResponseEntity.ok(documentMapper.mapDocumentToDocumentCreateDto(updatedDocument.get()));
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(null);
+        }
     }
 
-    // Șterge un document
+    @DeleteMapping("/dependencies/{id}")
+    public ResponseEntity<?> deleteDependentDocuments(@PathVariable Long id, @RequestBody List<Long> documentIds) {
+        documentService.deleteDependentDocuments(id, documentIds);
+        return ResponseEntity.noContent().build();
+    }
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteDocument(@PathVariable Long id) {
+    public ResponseEntity<?> deleteDocument(@PathVariable Long id) {
         documentService.delete(id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        return ResponseEntity.noContent().build();
     }
 }

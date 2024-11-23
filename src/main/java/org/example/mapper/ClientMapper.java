@@ -30,6 +30,12 @@ public class ClientMapper {
         return client;
     }
 
+    public ClientCreateDto mapClientToClientCreateDto(Client client) {
+        ClientCreateDto clientCreateDto = new ClientCreateDto();
+        clientCreateDto.setName(client.getName());
+        return clientCreateDto;
+    }
+
     public CreateUserRequestCommand mapClientToCreateUserRequestCommand(Client client) {
         CreateUserRequestCommand createUserRequestCommand = new CreateUserRequestCommand();
         createUserRequestCommand.setId(client.getId());
