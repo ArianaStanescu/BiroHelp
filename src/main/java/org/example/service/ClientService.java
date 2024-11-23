@@ -1,6 +1,8 @@
 package org.example.service;
 
 import jakarta.transaction.Transactional;
+import org.example.dto.ClientUpdateDocumentsDto;
+import org.example.dto.ClientUpdateNameDto;
 import org.example.entity.Client;
 import org.example.entity.Document;
 import org.example.repositories.ClientRepository;
@@ -55,53 +57,37 @@ public class ClientService {
     }
 
 
-    public Optional<Client> updateClientName(Long id, Map<String, Object> updates) {
+    public Optional<Client> updateClientName(Long id, ClientUpdateNameDto clientUpdateDto) {
         Optional<Client> optionalClient = clientRepository.findById(id);
 
         if (optionalClient.isPresent()) {
             Client client = optionalClient.get();
-            boolean invalidField = false;
-
-            for (Map.Entry<String, Object> entry : updates.entrySet()) {
-                String key = entry.getKey();
-                Object value = entry.getValue();
-
-                if ("name".equals(key)) {
-                    client.setName((String) value);
-                } else {
-                    invalidField = true;
-                }
-            }
-
-            if (invalidField) {
-                return Optional.empty();
-            }
-
+            client.setName(clientUpdateDto.getName());
+            client.setUsername(clientUpdateDto.getUsername());
             return Optional.of(clientRepository.save(client));
         }
 
         return Optional.empty();
     }
 
-    public Optional<Client> partialUpdateDocuments(Long id, Map<String, List<Long>> updates) {
+    public Optional<Client> partialUpdateDocuments(Long id, ClientUpdateDocumentsDto updates) {
         Optional<Client> optionalClient = clientRepository.findById(id);
 
         if (optionalClient.isPresent()) {
             Client client = optionalClient.get();
 
-            if (updates.containsKey("requestedDocuments")) {
-                List<Long> documentIds = updates.get("requestedDocuments");
-                List<Document> requestedDocuments = documentRepository.findAllById(documentIds);
+            if (updates.getRequestedDocumentIds() != null) {
+                List<Document> requestedDocuments = documentRepository.findAllById(updates.getRequestedDocumentIds());
                 client.setRequestedDocument(requestedDocuments);
             }
 
-            if (updates.containsKey("ownedDocuments")) {
-                List<Long> documentIds = updates.get("ownedDocuments");
-                List<Document> ownedDocuments = documentRepository.findAllById(documentIds);
+            if (updates.getOwnedDocumentsIds() != null) {
+                List<Document> ownedDocuments = documentRepository.findAllById(updates.getOwnedDocumentsIds());
                 client.setOwnedDocuments(ownedDocuments);
             }
 
-            return Optional.of(clientRepository.save(client));
+            clientRepository.save(client);
+            return Optional.of(client);
         }
 
         return Optional.empty();
