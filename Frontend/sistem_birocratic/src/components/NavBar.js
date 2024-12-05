@@ -20,6 +20,9 @@ function NavBar() {
                 </li>
                 {authenticatedUser ? (
                     <>
+                        <li>
+                            <Link to="/settings">Settings</Link> {/* Add Settings link */}
+                        </li>
                         <li>Welcome, {authenticatedUser.username}!</li>
                         <li>
                             <button onClick={handleLogout}>Logout</button>

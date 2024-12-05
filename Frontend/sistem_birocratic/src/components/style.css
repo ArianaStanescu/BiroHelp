@@ -1,5 +1,5 @@
 .auth-container {
-    max-width: 400px;
+    max-width: 600px;
     margin: 50px auto;
     padding: 20px;
     border: 1px solid #ccc;
@@ -20,10 +20,10 @@
     font-weight: bold;
 }
 
-.auth-container input {
+.auth-container select {
     width: calc(100% - 20px);
     padding: 8px 10px;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 16px;
@@ -38,17 +38,19 @@
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    margin-top: 10px;
 }
 
 .auth-container button:hover {
     background-color: #0056b3;
 }
 
-.auth-container .message {
-    margin-top: 15px;
-    color: red;
+.auth-container ul {
+    list-style: none;
+    padding: 0;
 }
 
-.auth-container p {
-    margin-top: 15px;
+.auth-container ul li {
+    padding: 5px;
+    border-bottom: 1px solid #ddd;
 }
