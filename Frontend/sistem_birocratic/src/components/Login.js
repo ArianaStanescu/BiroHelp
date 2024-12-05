@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from './AuthContext';
+import './Login.css'
 
 function Login() {
     const [username, setUsername] = useState('');
@@ -33,8 +34,8 @@ function Login() {
     };
 
     return (
-        <div>
-            <h1>Login Page</h1>
+        <div className="auth-container">
+            <h1>Login</h1>
             <form onSubmit={handleLogin}>
                 <label>
                     Username:
@@ -42,12 +43,16 @@ function Login() {
                         type="text"
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
+                        required
                     />
                 </label>
                 <br />
                 <button type="submit">Login</button>
             </form>
-            {message && <p>{message}</p>}
+            {message && <p className="message">{message}</p>}
+            <p>
+                Don't have an account? <Link to="/register">Register here</Link>.
+            </p>
         </div>
     );
 }
