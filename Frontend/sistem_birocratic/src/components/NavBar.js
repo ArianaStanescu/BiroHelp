@@ -21,7 +21,7 @@ function NavBar() {
                 {authenticatedUser ? (
                     <>
                         <li>
-                            <Link to="/settings">Settings</Link> {/* Add Settings link */}
+                            <Link to="/settings">Settings</Link>
                         </li>
                         <li>Welcome, {authenticatedUser.username}!</li>
                         <li>
