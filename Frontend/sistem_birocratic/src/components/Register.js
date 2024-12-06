@@ -1,12 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Login.css';
 
 function Register() {
     const [name, setName] = useState('');
     const [username, setUsername] = useState('');
+    const [ownedDocuments, setOwnedDocuments] = useState([]);
+    const [availableDocuments, setAvailableDocuments] = useState([]);
     const [message, setMessage] = useState('');
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const fetchDocuments = async () => {
+            try {
+                const response = await fetch('http://localhost:8080/documents');
+                if (response.ok) {
+                    const data = await response.json();
+                    setAvailableDocuments(data);
+                } else {
+                    console.error('Failed to fetch available documents.');
+                }
+            } catch (error) {
+                console.error('Error fetching available documents:', error);
+            }
+        };
+
+        fetchDocuments();
+    }, []);
 
     const handleRegister = async (e) => {
         e.preventDefault();
@@ -14,8 +34,8 @@ function Register() {
         const clientData = {
             name,
             username,
-            requestedDocumentIds: [], // Initialize as empty array
-            ownedDocumentsIds: [], // Initialize as empty array
+            requestedDocumentIds: [],
+            ownedDocumentsIds: ownedDocuments,
         };
 
         try {
@@ -29,13 +49,19 @@ function Register() {
 
             if (response.ok) {
                 setMessage('Registration successful! You can now log in.');
-                setTimeout(() => navigate('/login'), 2000); // Redirect to login after 2 seconds
+                setTimeout(() => navigate('/login'), 2000);
             } else {
                 setMessage('Registration failed. Please try again.');
             }
         } catch (error) {
             setMessage('An error occurred. Please try again later.');
         }
+    };
+
+    const handleOwnedDocumentsChange = (e) => {
+        const selectedOptions = Array.from(e.target.selectedOptions);
+        const selectedIds = selectedOptions.map((option) => option.value);
+        setOwnedDocuments(selectedIds);
     };
 
     return (
@@ -60,6 +86,21 @@ function Register() {
                         onChange={(e) => setUsername(e.target.value)}
                         required
                     />
+                </label>
+                <br />
+                <label>
+                    Select Owned Documents:
+                    <select
+                        multiple
+                        value={ownedDocuments}
+                        onChange={handleOwnedDocumentsChange}
+                    >
+                        {availableDocuments.map((doc) => (
+                            <option key={doc.id} value={doc.id}>
+                                {doc.name} (Issued by: {doc.issuingOffice.name})
+                            </option>
+                        ))}
+                    </select>
                 </label>
                 <br />
                 <button type="submit">Register</button>

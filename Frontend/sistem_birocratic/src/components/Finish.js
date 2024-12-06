@@ -9,9 +9,6 @@ function Finish() {
         <div className="auth-container">
             <h1>Thank You!</h1>
             <p>Your document request has been submitted successfully.</p>
-            <button onClick={() => navigate("/request-documents")}>
-                Make Another Request
-            </button>
             <button onClick={() => navigate("/")}>
                 Return to Home
             </button>
