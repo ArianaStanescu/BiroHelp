@@ -1,4 +1,5 @@
-.auth-container {
+/* General container styling */
+.auth-container, .welcome-container {
     max-width: 600px;
     margin: 50px auto;
     padding: 20px;
@@ -7,29 +8,23 @@
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     font-family: Arial, sans-serif;
     text-align: center;
+    background-color: #f9f9f9;
 }
 
-.auth-container h1 {
+/* Titles and paragraphs */
+.auth-container h1, .welcome-container h1 {
     font-size: 24px;
     margin-bottom: 20px;
 }
 
-.auth-container label {
-    display: block;
-    margin: 10px 0 5px;
-    font-weight: bold;
-}
-
-.auth-container select {
-    width: calc(100% - 20px);
-    padding: 8px 10px;
-    margin-bottom: 20px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+.auth-container p, .welcome-container p {
     font-size: 16px;
+    color: #555;
+    margin-bottom: 20px;
 }
 
-.auth-container button {
+/* Buttons */
+.auth-container button, .welcome-container button {
     width: 100%;
     padding: 10px;
     font-size: 16px;
@@ -41,16 +36,30 @@
     margin-top: 10px;
 }
 
-.auth-container button:hover {
+.auth-container button:hover, .welcome-container button:hover {
     background-color: #0056b3;
 }
 
-.auth-container ul {
+/* Document List */
+.documents-list {
     list-style: none;
     padding: 0;
 }
 
-.auth-container ul li {
-    padding: 5px;
+.documents-list .document-item {
+    padding: 10px;
     border-bottom: 1px solid #ddd;
+    text-align: left;
+}
+
+.documents-list .document-item h3 {
+    font-size: 18px;
+    margin: 0;
+    color: #333;
+}
+
+/* Empty state */
+.auth-container p.no-documents {
+    color: #888;
+    font-style: italic;
 }

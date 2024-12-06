@@ -30,7 +30,7 @@ function Home() {
 
     if (!authenticatedUser) {
         return (
-            <div>
+            <div className="welcome-container">
                 <h1>Welcome to BiroHelp!</h1>
                 <p>You need to log in to access your dashboard.</p>
                 <button onClick={() => navigate("/login")}>Go to Login</button>
@@ -54,7 +54,7 @@ function Home() {
                         ))}
                     </ul>
                 ) : (
-                    <p>You currently don't own any documents.</p>
+                    <p className="no-documents">You currently don't own any documents.</p>
                 )}
             </div>
 
