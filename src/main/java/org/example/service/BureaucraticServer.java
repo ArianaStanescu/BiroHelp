@@ -26,7 +26,7 @@ public class BureaucraticServer {
             Document currentDoc = reverseOrder.poll();
 
             if (client.ownsDocument(currentDoc)) {
-                System.out.println("Client already owns document: " + currentDoc.getName());
+                System.out.println("Clientul detine deja documentul: " + currentDoc.getName());
                 continue;
             }
 

@@ -83,13 +83,13 @@ public class Counter {
         busy = true;
         System.out.println("Ghiseul " + name + " procesează clientul " + client.getName());
 
-        Thread.sleep(2000);
+        Thread.sleep(1000);
         busy = false;
 
         if (rand.nextInt(10) < 2) {
             takeBreak();
             System.out.println("Ghiseul " + name + " a intrat în pauză.");
-            Thread.sleep(5000);
+            Thread.sleep(2000);
             endBreak();
             System.out.println("Ghiseul " + name + " a ieșit din pauză.");
         }

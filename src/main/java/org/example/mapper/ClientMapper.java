@@ -29,7 +29,7 @@ public class ClientMapper {
     public Client mapClientCreateDtoToClient(ClientCreateDto clientCreateDto) {
         Client client = new Client();
         client.setName(clientCreateDto.getName());
-        client.setUsername(clientCreateDto.getName());
+        client.setUsername(clientCreateDto.getUsername());
         return client;
     }
 
