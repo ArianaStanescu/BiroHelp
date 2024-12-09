@@ -1,4 +1,4 @@
-.auth-container, .welcome-container {
+.offices-container {
     max-width: 600px;
     margin: 50px auto;
     padding: 20px;
@@ -10,18 +10,22 @@
     background-color: #f9f9f9;
 }
 
-.auth-container h1, .welcome-container h1 {
+.offices-container h1 {
     font-size: 24px;
     margin-bottom: 20px;
 }
 
-.auth-container p, .welcome-container p {
+.offices-container input[type="text"] {
+    width: 100%;
+    padding: 10px;
     font-size: 16px;
-    color: #555;
+    border: 1px solid #ccc;
+    border-radius: 4px;
     margin-bottom: 20px;
+    box-sizing: border-box;
 }
 
-.auth-container button, .welcome-container button {
+.offices-container button {
     width: 100%;
     padding: 10px;
     font-size: 16px;
@@ -30,31 +34,49 @@
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    margin-top: 10px;
 }
 
-.auth-container button:hover, .welcome-container button:hover {
+.offices-container button:hover {
     background-color: #0056b3;
 }
 
-.documents-list {
-    list-style: none;
-    padding: 0;
+.offices-container button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
 }
 
-.documents-list .document-item {
+.offices-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.offices-list .office-item {
     padding: 10px;
     border-bottom: 1px solid #ddd;
     text-align: left;
 }
 
-.documents-list .document-item h3 {
+.offices-list .office-item h3 {
     font-size: 18px;
     margin: 0;
     color: #333;
 }
 
-.auth-container p.no-documents {
+.offices-container p.no-offices {
     color: #888;
     font-style: italic;
+}
+
+.offices-container .office-item button {
+    background-color: #dc3545;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+}
+
+.offices-container .office-item button:hover {
+    background-color: #c82333;
 }

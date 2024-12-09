@@ -1,13 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from './AuthContext';
-import './Login.css'
+import './Login.css';
 
 function Login() {
     const [username, setUsername] = useState('');
     const [message, setMessage] = useState('');
     const navigate = useNavigate();
     const { setAuthenticatedUser } = useAuth();
+
+    useEffect(() => {
+        const storedUser = localStorage.getItem('authenticatedUser');
+        if (storedUser) {
+            setAuthenticatedUser(JSON.parse(storedUser));
+            navigate('/');
+        }
+    }, [navigate, setAuthenticatedUser]);
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -21,6 +29,7 @@ function Login() {
                 if (user) {
                     setMessage(`Welcome, ${user.name}!`);
                     setAuthenticatedUser(user);
+                    localStorage.setItem('authenticatedUser', JSON.stringify(user)); // Save the user in localStorage
                     navigate('/');
                 } else {
                     setMessage('User not found');

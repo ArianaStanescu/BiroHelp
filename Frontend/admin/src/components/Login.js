@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from './AuthContext';
 import './Login.css';
 
@@ -9,14 +9,22 @@ function Login() {
     const navigate = useNavigate();
     const { setAuthenticatedUser } = useAuth();
 
+    useEffect(() => {
+        const storedUser = localStorage.getItem('authenticatedUser');
+        if (storedUser) {
+            setAuthenticatedUser(JSON.parse(storedUser));
+            navigate('/');
+        }
+    }, [navigate, setAuthenticatedUser]);
+
     const handleLogin = (e) => {
         e.preventDefault();
 
         if (username === 'admin123') {
-            // Simulating a successful login
             const adminUser = { id: 1, name: 'Admin', username: 'admin123' };
             setMessage(`Welcome, ${adminUser.name}!`);
             setAuthenticatedUser(adminUser);
+            localStorage.setItem('authenticatedUser', JSON.stringify(adminUser));
             navigate('/');
         } else {
             setMessage('Access denied. Only "admin123" can log in.');

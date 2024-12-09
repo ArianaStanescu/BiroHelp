@@ -20,7 +20,7 @@ function Settings() {
 
             if (response.ok) {
                 const updatedUser = await response.json();
-                setAuthenticatedUser(updatedUser); // Update local context
+                setAuthenticatedUser(updatedUser);
                 setMessage('Profile updated successfully!');
             } else {
                 setMessage('Failed to update profile. Please try again.');
