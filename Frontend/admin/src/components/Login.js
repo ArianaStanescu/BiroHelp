@@ -13,7 +13,6 @@ function Login() {
         e.preventDefault();
 
         if (username === 'admin123') {
-            // Simulating a successful login
             const adminUser = { id: 1, name: 'Admin', username: 'admin123' };
             setMessage(`Welcome, ${adminUser.name}!`);
             setAuthenticatedUser(adminUser);

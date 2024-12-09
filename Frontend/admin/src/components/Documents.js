@@ -1,12 +1,27 @@
 import React, { useState, useEffect } from "react";
+import "./Documents.css";
 
 const Documents = () => {
-  const [offices, setOffices] = useState([]); // List of offices
-  const [allDocuments, setAllDocuments] = useState([]); // List of all documents
-  const [documentsByOffice, setDocumentsByOffice] = useState([]); // Documents grouped by office
+  const [offices, setOffices] = useState([]);
+  const [allDocuments, setAllDocuments] = useState([]);
+  const [documentsByOffice, setDocumentsByOffice] = useState([]);
   const [newDocumentName, setNewDocumentName] = useState("");
   const [selectedOfficeId, setSelectedOfficeId] = useState("");
-  const [selectedDependencies, setSelectedDependencies] = useState({}); // Track selected dependency for each document
+  const [selectedDependencies, setSelectedDependencies] = useState({});
+
+  const fetchAllDocuments = async () => {
+    const res = await fetch("http://localhost:8080/documents");
+    const allDocs = await res.json();
+    setAllDocuments(allDocs);
+
+    const grouped = offices.map((office) => ({
+      office,
+      documents: allDocs.filter(
+          (doc) => doc.issuingOffice && doc.issuingOffice.id === office.id
+      ),
+    }));
+    setDocumentsByOffice(grouped);
+  };
 
   useEffect(() => {
     fetchOffices();
@@ -19,24 +34,16 @@ const Documents = () => {
   }, [offices]);
 
   const fetchOffices = async () => {
-    const res = await fetch("http://localhost:8080/offices");
-    const data = await res.json();
-    setOffices(data);
-  };
-
-  const fetchAllDocuments = async () => {
-    const res = await fetch("http://localhost:8080/documents");
-    const allDocs = await res.json();
-    setAllDocuments(allDocs);
-
-    // Group documents by issuing office
-    const grouped = offices.map((office) => ({
-      office,
-      documents: allDocs.filter(
-        (doc) => doc.issuingOffice && doc.issuingOffice.id === office.id
-      ),
-    }));
-    setDocumentsByOffice(grouped);
+    try {
+      const res = await fetch("http://localhost:8080/offices");
+      if (!res.ok) {
+        throw new Error('Failed to fetch offices');
+      }
+      const data = await res.json();
+      setOffices(data);
+    } catch (error) {
+      console.error("Error fetching offices:", error);
+    }
   };
 
   const addDocument = async () => {
@@ -90,100 +97,96 @@ const Documents = () => {
   };
 
   return (
-    <div>
-      <h1>Edit Documents</h1>
+      <div className="documents-container">
+        <h1>Edit Documents</h1>
 
-      {/* Add New Document */}
-      <div>
-        <h2>Add New Document</h2>
-        <input
-          type="text"
-          placeholder="Document Name"
-          value={newDocumentName}
-          onChange={(e) => setNewDocumentName(e.target.value)}
-        />
-        <select
-          value={selectedOfficeId}
-          onChange={(e) => setSelectedOfficeId(e.target.value)}
-        >
-          <option value="">Select Office</option>
-          {offices.map((office) => (
-            <option key={office.id} value={office.id}>
-              {office.name} (ID: {office.id})
-            </option>
+        <div>
+          <h2>Add New Document</h2>
+          <input
+              type="text"
+              placeholder="Document Name"
+              value={newDocumentName}
+              onChange={(e) => setNewDocumentName(e.target.value)}
+          />
+          <select
+              value={selectedOfficeId}
+              onChange={(e) => setSelectedOfficeId(e.target.value)}
+          >
+            <option value="">Select Office</option>
+            {offices.map((office) => (
+                <option key={office.id} value={office.id}>
+                  {office.name} (ID: {office.id})
+                </option>
+            ))}
+          </select>
+          <button onClick={addDocument}>Add Document</button>
+        </div>
+
+        <div>
+          <h2>Documents by Office</h2>
+          {documentsByOffice.map((group) => (
+              <div key={group.office.id}>
+                <h3>
+                  {group.office.name} (ID: {group.office.id})
+                </h3>
+                <ul>
+                  {group.documents.map((doc) => (
+                      <li key={doc.id}>
+                        <strong>{doc.name} (ID: {doc.id})</strong>{" "}
+                        <button onClick={() => deleteDocument(doc.id)}>Delete</button>
+
+                        <div>
+                          <label>Add Dependency: </label>
+                          <select
+                              value={selectedDependencies[doc.id] || ""}
+                              onChange={(e) =>
+                                  setSelectedDependencies({
+                                    ...selectedDependencies,
+                                    [doc.id]: e.target.value,
+                                  })
+                              }
+                          >
+                            <option value="">Select Document</option>
+                            {allDocuments
+                                .filter((d) => d.id !== doc.id)
+                                .map((d) => (
+                                    <option key={d.id} value={d.id}>
+                                      {d.name} (ID: {d.id})
+                                    </option>
+                                ))}
+                          </select>
+                          <button onClick={() => addDocumentDependency(doc.id)}>
+                            Add Dependency
+                          </button>
+                        </div>
+
+                        {doc.necessaryDocuments &&
+                            doc.necessaryDocuments.length > 0 && (
+                                <div>
+                                  <h4>Dependencies:</h4>
+                                  <ul>
+                                    {doc.necessaryDocuments.map((dependency) => (
+                                        <li key={dependency.id}>
+                                          {dependency.name} (ID: {dependency.id}){" "}
+                                          <button
+                                              onClick={() =>
+                                                  deleteDocumentDependency(doc.id, dependency.id)
+                                              }
+                                          >
+                                            Remove Dependency
+                                          </button>
+                                        </li>
+                                    ))}
+                                  </ul>
+                                </div>
+                            )}
+                      </li>
+                  ))}
+                </ul>
+              </div>
           ))}
-        </select>
-        <button onClick={addDocument}>Add Document</button>
+        </div>
       </div>
-
-      {/* List Documents by Office */}
-      <div>
-        <h2>Documents by Office</h2>
-        {documentsByOffice.map((group) => (
-          <div key={group.office.id}>
-            <h3>
-              {group.office.name} (ID: {group.office.id})
-            </h3>
-            <ul>
-              {group.documents.map((doc) => (
-                <li key={doc.id}>
-                  <strong>{doc.name} (ID: {doc.id})</strong>{" "}
-                  <button onClick={() => deleteDocument(doc.id)}>Delete</button>
-
-                  {/* Add Dependency */}
-                  <div>
-                    <label>Add Dependency: </label>
-                    <select
-                      value={selectedDependencies[doc.id] || ""}
-                      onChange={(e) =>
-                        setSelectedDependencies({
-                          ...selectedDependencies,
-                          [doc.id]: e.target.value,
-                        })
-                      }
-                    >
-                      <option value="">Select Document</option>
-                      {allDocuments
-                        .filter((d) => d.id !== doc.id) // Exclude current document
-                        .map((d) => (
-                          <option key={d.id} value={d.id}>
-                            {d.name} (ID: {d.id})
-                          </option>
-                        ))}
-                    </select>
-                    <button onClick={() => addDocumentDependency(doc.id)}>
-                      Add Dependency
-                    </button>
-                  </div>
-
-                  {/* Display Dependencies */}
-                  {doc.necessaryDocuments &&
-                    doc.necessaryDocuments.length > 0 && (
-                      <div>
-                        <h4>Dependencies:</h4>
-                        <ul>
-                          {doc.necessaryDocuments.map((dependency) => (
-                            <li key={dependency.id}>
-                              {dependency.name} (ID: {dependency.id}){" "}
-                              <button
-                                onClick={() =>
-                                  deleteDocumentDependency(doc.id, dependency.id)
-                                }
-                              >
-                                Remove Dependency
-                              </button>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
-      </div>
-    </div>
   );
 };
 

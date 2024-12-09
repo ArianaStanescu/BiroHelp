@@ -1,4 +1,4 @@
-.auth-container, .welcome-container {
+.offices-container {
     max-width: 600px;
     margin: 50px auto;
     padding: 20px;
@@ -10,18 +10,17 @@
     background-color: #f9f9f9;
 }
 
-.auth-container h1, .welcome-container h1 {
+.offices-container h1 {
     font-size: 24px;
     margin-bottom: 20px;
 }
 
-.auth-container p, .welcome-container p {
-    font-size: 16px;
-    color: #555;
-    margin-bottom: 20px;
+.offices-container h2 {
+    font-size: 20px;
+    margin-bottom: 15px;
 }
 
-.auth-container button, .welcome-container button {
+.offices-container button {
     width: 100%;
     padding: 10px;
     font-size: 16px;
@@ -33,28 +32,34 @@
     margin-top: 10px;
 }
 
-.auth-container button:hover, .welcome-container button:hover {
+.offices-container button:hover {
     background-color: #0056b3;
 }
 
-.documents-list {
-    list-style: none;
-    padding: 0;
+.offices-container button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
 }
 
-.documents-list .document-item {
+.offices-container ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.offices-container .office-item {
     padding: 10px;
     border-bottom: 1px solid #ddd;
     text-align: left;
 }
 
-.documents-list .document-item h3 {
+.offices-container .office-item h3 {
     font-size: 18px;
-    margin: 0;
     color: #333;
+    margin: 0;
 }
 
-.auth-container p.no-documents {
+.offices-container p.no-offices {
     color: #888;
     font-style: italic;
 }

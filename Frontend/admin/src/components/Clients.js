@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
+import "./Clients.css";
 
 const EditClients = () => {
-  const [clients, setClients] = useState([]); // List of clients
-  const [editedClients, setEditedClients] = useState({}); // Track updated fields per client
+  const [clients, setClients] = useState([]);
+  const [editedClients, setEditedClients] = useState({});
 
   useEffect(() => {
     fetchClients();
@@ -70,7 +71,6 @@ const EditClients = () => {
                 }
               />
 
-              {/* Input for Username */}
               <input
                 type="text"
                 placeholder="New Username"
@@ -80,12 +80,10 @@ const EditClients = () => {
                 }
               />
 
-              {/* Buttons */}
               <button onClick={() => updateClient(client.id)}>Save Changes</button>
               <button onClick={() => deleteClient(client.id)}>Delete</button>
             </div>
 
-            {/* Display Owned Documents */}
             {client.ownedDocuments && client.ownedDocuments.length > 0 && (
               <div>
                 <h4>Owned Documents:</h4>

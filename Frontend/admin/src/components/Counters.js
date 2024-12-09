@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
+import './Counters.css';
 
 const EditCounters = () => {
-  const [officesWithCounters, setOfficesWithCounters] = useState([]); // Offices with their counters
-  const [offices, setOffices] = useState([]); // All offices for dropdown
+  const [officesWithCounters, setOfficesWithCounters] = useState([]);
+  const [offices, setOffices] = useState([]);
   const [newCounterName, setNewCounterName] = useState("");
   const [selectedOfficeId, setSelectedOfficeId] = useState("");
 
@@ -11,21 +12,18 @@ const EditCounters = () => {
     fetchOffices();
   }, []);
 
-  // Fetch all offices and their respective counters
   const fetchOfficesWithCounters = async () => {
     const res = await fetch("http://localhost:8080/offices");
     const data = await res.json();
     setOfficesWithCounters(data);
   };
 
-  // Fetch all offices for the dropdown selection
   const fetchOffices = async () => {
     const res = await fetch("http://localhost:8080/offices");
     const data = await res.json();
     setOffices(data);
   };
 
-  // Add a new counter to the selected office
   const addCounter = async () => {
     if (!selectedOfficeId || !newCounterName) {
       alert("Please select an office and enter the counter name!");
@@ -56,7 +54,6 @@ const EditCounters = () => {
     <div>
       <h1>Edit Counters</h1>
 
-      {/* Input Section for Adding Counters */}
       <div>
         <input
           type="text"
