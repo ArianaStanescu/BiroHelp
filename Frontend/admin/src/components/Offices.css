@@ -15,9 +15,14 @@
     margin-bottom: 20px;
 }
 
-.offices-container h2 {
-    font-size: 20px;
-    margin-bottom: 15px;
+.offices-container input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    box-sizing: border-box;
 }
 
 .offices-container button {
@@ -29,7 +34,6 @@
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    margin-top: 10px;
 }
 
 .offices-container button:hover {
@@ -41,25 +45,38 @@
     cursor: not-allowed;
 }
 
-.offices-container ul {
+.offices-list {
     list-style: none;
     padding: 0;
     margin: 0;
 }
 
-.offices-container .office-item {
+.offices-list .office-item {
     padding: 10px;
     border-bottom: 1px solid #ddd;
     text-align: left;
 }
 
-.offices-container .office-item h3 {
+.offices-list .office-item h3 {
     font-size: 18px;
-    color: #333;
     margin: 0;
+    color: #333;
 }
 
 .offices-container p.no-offices {
     color: #888;
     font-style: italic;
+}
+
+.offices-container .office-item button {
+    background-color: #dc3545;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+}
+
+.offices-container .office-item button:hover {
+    background-color: #c82333;
 }

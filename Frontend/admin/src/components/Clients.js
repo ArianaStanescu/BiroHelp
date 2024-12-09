@@ -51,7 +51,7 @@ const EditClients = () => {
   };
 
   return (
-    <div>
+    <div className={'clients-container'}>
       <h1>Edit Clients</h1>
 
       <ul>

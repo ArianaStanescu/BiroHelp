@@ -10,17 +10,21 @@ const Documents = () => {
   const [selectedDependencies, setSelectedDependencies] = useState({});
 
   const fetchAllDocuments = async () => {
-    const res = await fetch("http://localhost:8080/documents");
-    const allDocs = await res.json();
-    setAllDocuments(allDocs);
+    try {
+      const res = await fetch("http://localhost:8080/documents");
+      const allDocs = await res.json();
+      setAllDocuments(allDocs);
 
-    const grouped = offices.map((office) => ({
-      office,
-      documents: allDocs.filter(
-          (doc) => doc.issuingOffice && doc.issuingOffice.id === office.id
-      ),
-    }));
-    setDocumentsByOffice(grouped);
+      const grouped = offices.map((office) => ({
+        office,
+        documents: allDocs.filter(
+            (doc) => doc.issuingOffice && doc.issuingOffice.id === office.id
+        ),
+      }));
+      setDocumentsByOffice(grouped);
+    } catch (error) {
+      console.error("Error fetching documents:", error);
+    }
   };
 
   useEffect(() => {
@@ -52,22 +56,38 @@ const Documents = () => {
       return;
     }
 
-    await fetch(`http://localhost:8080/documents/${selectedOfficeId}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name: newDocumentName }),
-    });
+    try {
+      await fetch(`http://localhost:8080/documents/${selectedOfficeId}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: newDocumentName }),
+      });
 
-    setNewDocumentName("");
-    setSelectedOfficeId("");
-    fetchAllDocuments();
+      setNewDocumentName("");
+      setSelectedOfficeId("");
+      fetchAllDocuments();
+    } catch (error) {
+      console.error("Error adding document:", error);
+      alert("Failed to add document.");
+    }
   };
 
   const deleteDocument = async (documentId) => {
-    await fetch(`http://localhost:8080/documents/${documentId}`, {
-      method: "DELETE",
-    });
-    fetchAllDocuments();
+    try {
+      const response = await fetch(`http://localhost:8080/documents/${documentId}`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to delete document (ID: ${documentId})`);
+      }
+
+      fetchAllDocuments();
+    } catch (error) {
+      console.error("Error deleting document:", error);
+      alert(`Failed to delete document. ${error.message}`);
+    }
   };
 
   const addDocumentDependency = async (documentId) => {
@@ -126,13 +146,11 @@ const Documents = () => {
           <h2>Documents by Office</h2>
           {documentsByOffice.map((group) => (
               <div key={group.office.id}>
-                <h3>
-                  {group.office.name} (ID: {group.office.id})
-                </h3>
+                <h3>{group.office.name} (ID: {group.office.id})</h3>
                 <ul>
                   {group.documents.map((doc) => (
                       <li key={doc.id}>
-                        <strong>{doc.name} (ID: {doc.id})</strong>{" "}
+                        <strong>{doc.name} (ID: {doc.id})</strong>
                         <button onClick={() => deleteDocument(doc.id)}>Delete</button>
 
                         <div>
@@ -160,26 +178,25 @@ const Documents = () => {
                           </button>
                         </div>
 
-                        {doc.necessaryDocuments &&
-                            doc.necessaryDocuments.length > 0 && (
-                                <div>
-                                  <h4>Dependencies:</h4>
-                                  <ul>
-                                    {doc.necessaryDocuments.map((dependency) => (
-                                        <li key={dependency.id}>
-                                          {dependency.name} (ID: {dependency.id}){" "}
-                                          <button
-                                              onClick={() =>
-                                                  deleteDocumentDependency(doc.id, dependency.id)
-                                              }
-                                          >
-                                            Remove Dependency
-                                          </button>
-                                        </li>
-                                    ))}
-                                  </ul>
-                                </div>
-                            )}
+                        {doc.necessaryDocuments && doc.necessaryDocuments.length > 0 && (
+                            <div>
+                              <h4>Dependencies:</h4>
+                              <ul>
+                                {doc.necessaryDocuments.map((dependency) => (
+                                    <li key={dependency.id}>
+                                      {dependency.name} (ID: {dependency.id}){" "}
+                                      <button
+                                          onClick={() =>
+                                              deleteDocumentDependency(doc.id, dependency.id)
+                                          }
+                                      >
+                                        Remove Dependency
+                                      </button>
+                                    </li>
+                                ))}
+                              </ul>
+                            </div>
+                        )}
                       </li>
                   ))}
                 </ul>

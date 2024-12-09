@@ -51,7 +51,7 @@ const EditCounters = () => {
   };
 
   return (
-    <div>
+    <div className={'counters-container'}>
       <h1>Edit Counters</h1>
 
       <div>

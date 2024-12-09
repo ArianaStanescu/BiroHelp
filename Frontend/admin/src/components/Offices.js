@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./Offices.css";
-
+import './Offices.css';
 const Offices = () => {
   const [offices, setOffices] = useState([]);
   const [newOfficeName, setNewOfficeName] = useState("");
@@ -32,7 +31,7 @@ const Offices = () => {
   };
 
   return (
-    <div>
+      <div className="offices-container">
       <h1>Edit Offices</h1>
       <input
         type="text"
