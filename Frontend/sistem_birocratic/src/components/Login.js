@@ -9,11 +9,10 @@ function Login() {
     const navigate = useNavigate();
     const { setAuthenticatedUser } = useAuth();
 
-    // Check for existing authenticated user on page load
     useEffect(() => {
         const storedUser = localStorage.getItem('authenticatedUser');
         if (storedUser) {
-            setAuthenticatedUser(JSON.parse(storedUser)); // If user exists in localStorage, set them
+            setAuthenticatedUser(JSON.parse(storedUser));
             navigate('/');
         }
     }, [navigate, setAuthenticatedUser]);
