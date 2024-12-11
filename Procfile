@@ -1,1 +1,1 @@
-java_version=21
+web: java -jar target/BureaucracySimulation-1.0-SNAPSHOT.jar
