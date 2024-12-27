@@ -51,55 +51,63 @@ const EditClients = () => {
   };
 
   return (
-    <div className={'clients-container'}>
-      <h1>Edit Clients</h1>
+      <div className="clients-container">
+        <h1>Edit Clients</h1>
+        <ul>
+          {clients.map((client) => (
+              <li key={client.id} className="client-item">
+                <div className="client-container">
+                  <h2>
+                    Name: {client.name} -- Username: {client.username}
+                  </h2>
+                  <div>
+                    <input
+                        type="text"
+                        placeholder="New Name"
+                        value={editedClients[client.id]?.name || ""}
+                        onChange={(e) =>
+                            handleInputChange(client.id, "name", e.target.value)
+                        }
+                    />
+                    <input
+                        type="text"
+                        placeholder="New Username"
+                        value={editedClients[client.id]?.username || ""}
+                        onChange={(e) =>
+                            handleInputChange(client.id, "username", e.target.value)
+                        }
+                    />
+                    <button
+                        className="save-button"
+                        onClick={() => updateClient(client.id)}
+                    >
+                      Save Changes
+                    </button>
+                    <button
+                        className="delete-button"
+                        onClick={() => deleteClient(client.id)}
+                    >
+                      Delete
+                    </button>
+                  </div>
 
-      <ul>
-        {clients.map((client) => (
-          <li key={client.id}>
-            <strong>
-              Name - {client.name} :: Username - {client.username} : ID - {client.id}
-            </strong>
-            <div>
-              {/* Input for Name */}
-              <input
-                type="text"
-                placeholder="New Name"
-                value={editedClients[client.id]?.name || ""}
-                onChange={(e) =>
-                  handleInputChange(client.id, "name", e.target.value)
-                }
-              />
-
-              <input
-                type="text"
-                placeholder="New Username"
-                value={editedClients[client.id]?.username || ""}
-                onChange={(e) =>
-                  handleInputChange(client.id, "username", e.target.value)
-                }
-              />
-
-              <button onClick={() => updateClient(client.id)}>Save Changes</button>
-              <button onClick={() => deleteClient(client.id)}>Delete</button>
-            </div>
-
-            {client.ownedDocuments && client.ownedDocuments.length > 0 && (
-              <div>
-                <h4>Owned Documents:</h4>
-                <ul>
-                  {client.ownedDocuments.map((doc) => (
-                    <li key={doc.id}>
-                      {doc.name} (ID: {doc.id})
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </li>
-        ))}
-      </ul>
-    </div>
+                  {client.ownedDocuments && client.ownedDocuments.length > 0 && (
+                      <div className="owned-documents">
+                        <h3>Owned Documents:</h3>
+                        <ul >
+                          {client.ownedDocuments.map((doc) => (
+                              <li key={doc.id} >
+                                <h4>{doc.name}</h4>
+                              </li>
+                          ))}
+                        </ul>
+                      </div>
+                  )}
+                </div>
+              </li>
+          ))}
+        </ul>
+      </div>
   );
 };
 

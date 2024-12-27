@@ -69,27 +69,27 @@ const EditCounters = () => {
           <option value="">Select Office</option>
           {offices.map((office) => (
             <option key={office.id} value={office.id}>
-              {office.name} (ID: {office.id})
+              {office.name}
             </option>
           ))}
         </select>
 
-        <button onClick={addCounter}>Add Counter</button>
+        <button  className="add-button" onClick={addCounter}>Add Counter</button>
       </div>
 
       <div>
-        <h2>Available Counters by Office</h2>
+        <h2>Counters by Office</h2>
         {officesWithCounters.map((office) => (
           <div key={office.id}>
             <h3>
-              {office.name} (ID: {office.id})
+              {office.name}
             </h3>
             <ul>
               {office.counters && office.counters.length > 0 ? (
                 office.counters.map((counter) => (
                   <li key={counter.id}>
                     {counter.name}{" "}
-                    <button onClick={() => deleteCounter(counter.id)}>Delete</button>
+                    <button className="delete-button" onClick={() => deleteCounter(counter.id)}>Delete</button>
                   </li>
                 ))
               ) : (

@@ -2,38 +2,75 @@
     max-width: 600px;
     margin: 50px auto;
     padding: 20px;
-    border: 1px solid #ccc;
+    border: 1px solid #ddd;
     border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     font-family: Arial, sans-serif;
-    text-align: center;
-    background-color: #f9f9f9;
+    background-color: #ffffff;
+    text-align: left;
 }
 
 .counters-container h1 {
-    font-size: 24px;
+    font-size: 28px;
     margin-bottom: 20px;
+    color: #333;
+    text-align: center;
 }
 
 .counters-container h2 {
-    font-size: 20px;
-    margin-bottom: 15px;
+    font-size: 24px;
+    margin: 20px 0;
+    color: #555;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 10px;
+    text-align: center;
 }
 
-.counters-container button {
-    width: 100%;
+.counters-container div {
+    margin-bottom: 20px;
+}
+
+.counters-container input,
+.counters-container select {
+    width: calc(100% - 20px);
     padding: 10px;
+    margin: 10px 0;
     font-size: 16px;
-    color: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.counters-container button.add-button {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    color: #ffffff;
     background-color: #007bff;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     margin-top: 10px;
+    transition: background-color 0.3s ease;
 }
 
-.counters-container button:hover {
+.counters-container button.add-button:hover {
     background-color: #0056b3;
+}
+
+.counters-container button.delete-button {
+    padding: 6px 12px;
+    font-size: 14px;
+    color: #ffffff;
+    background-color: #e74c3c;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.counters-container button.delete-button:hover {
+    background-color: #c0392b;
 }
 
 .counters-container button:disabled {
@@ -47,19 +84,21 @@
     margin: 0;
 }
 
-.counters-container .counter-item {
+.counters-container li {
     padding: 10px;
     border-bottom: 1px solid #ddd;
-    text-align: left;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 16px;
+    color: #333;
 }
 
-.counters-container .counter-item h3 {
-    font-size: 18px;
-    color: #333;
-    margin: 0;
-}
+
 
 .counters-container p.no-counters {
     color: #888;
     font-style: italic;
+    text-align: center;
+    margin-top: 10px;
 }

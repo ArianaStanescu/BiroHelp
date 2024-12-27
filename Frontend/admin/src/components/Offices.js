@@ -44,8 +44,8 @@ const Offices = () => {
       <ul>
         {offices.map((office) => (
           <li key={office.id}>
-            {office.name}{" "}
-            <button onClick={() => deleteOffice(office.id)}>Delete</button>
+            <h3>{office.name}{" "}</h3>
+            <button className="del-button" onClick={() => deleteOffice(office.id)}>Delete</button>
           </li>
         ))}
       </ul>

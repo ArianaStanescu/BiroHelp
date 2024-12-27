@@ -9,6 +9,7 @@ const Documents = () => {
   const [selectedOfficeId, setSelectedOfficeId] = useState("");
   const [selectedDependencies, setSelectedDependencies] = useState({});
 
+
   const fetchAllDocuments = async () => {
     try {
       const res = await fetch("http://localhost:8080/documents");
@@ -27,15 +28,18 @@ const Documents = () => {
     }
   };
 
+
   useEffect(() => {
     fetchOffices();
   }, []);
+
 
   useEffect(() => {
     if (offices.length > 0) {
       fetchAllDocuments();
     }
   }, [offices]);
+
 
   const fetchOffices = async () => {
     try {
@@ -49,6 +53,7 @@ const Documents = () => {
       console.error("Error fetching offices:", error);
     }
   };
+
 
   const addDocument = async () => {
     if (!newDocumentName || !selectedOfficeId) {
@@ -90,6 +95,7 @@ const Documents = () => {
     }
   };
 
+
   const addDocumentDependency = async (documentId) => {
     const dependencyId = selectedDependencies[documentId];
     if (!dependencyId) {
@@ -107,6 +113,7 @@ const Documents = () => {
     fetchAllDocuments();
   };
 
+
   const deleteDocumentDependency = async (documentId, dependencyId) => {
     await fetch(`http://localhost:8080/documents/dependencies/${documentId}`, {
       method: "DELETE",
@@ -120,7 +127,7 @@ const Documents = () => {
       <div className="documents-container">
         <h1>Edit Documents</h1>
 
-        <div>
+        <div className="add-document-card">
           <h2>Add New Document</h2>
           <input
               type="text"
@@ -135,25 +142,25 @@ const Documents = () => {
             <option value="">Select Office</option>
             {offices.map((office) => (
                 <option key={office.id} value={office.id}>
-                  {office.name} (ID: {office.id})
+                  {office.name}
                 </option>
             ))}
           </select>
-          <button onClick={addDocument}>Add Document</button>
+          <button className="add-btn" onClick={addDocument}>Add Document</button>
         </div>
 
-        <div>
+        <div className="documents-list">
           <h2>Documents by Office</h2>
           {documentsByOffice.map((group) => (
-              <div key={group.office.id}>
-                <h3>{group.office.name} (ID: {group.office.id})</h3>
+              <div key={group.office.id} className="office-card">
+                <h3>{group.office.name} </h3>
                 <ul>
                   {group.documents.map((doc) => (
-                      <li key={doc.id}>
-                        <strong>{doc.name} (ID: {doc.id})</strong>
-                        <button onClick={() => deleteDocument(doc.id)}>Delete</button>
+                      <li key={doc.id} className="document-card">
+                        <strong>{doc.name} </strong>
+                        <button className="delete-btn" onClick={() => deleteDocument(doc.id)}>Delete</button>
 
-                        <div>
+                        <div className="dependency-section">
                           <label>Add Dependency: </label>
                           <select
                               value={selectedDependencies[doc.id] || ""}
@@ -169,23 +176,27 @@ const Documents = () => {
                                 .filter((d) => d.id !== doc.id)
                                 .map((d) => (
                                     <option key={d.id} value={d.id}>
-                                      {d.name} (ID: {d.id})
+                                      {d.name}
                                     </option>
                                 ))}
                           </select>
-                          <button onClick={() => addDocumentDependency(doc.id)}>
+                          <button
+                              className="add-dep-btn"
+                              onClick={() => addDocumentDependency(doc.id)}
+                          >
                             Add Dependency
                           </button>
                         </div>
 
                         {doc.necessaryDocuments && doc.necessaryDocuments.length > 0 && (
-                            <div>
+                            <div className="dependencies-list">
                               <h4>Dependencies:</h4>
                               <ul>
                                 {doc.necessaryDocuments.map((dependency) => (
                                     <li key={dependency.id}>
-                                      {dependency.name} (ID: {dependency.id}){" "}
+                                      {dependency.name} {" "}
                                       <button
+                                          className="remove-dep-btn"
                                           onClick={() =>
                                               deleteDocumentDependency(doc.id, dependency.id)
                                           }

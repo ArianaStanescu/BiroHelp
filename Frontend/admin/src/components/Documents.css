@@ -1,61 +1,146 @@
+
 .documents-container {
-    max-width: 600px;
-    margin: 50px auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     font-family: Arial, sans-serif;
-    text-align: center;
-    background-color: #f9f9f9;
 }
 
-.documents-container h1 {
-    font-size: 24px;
+
+h1, h2, h3 {
+    text-align: center;
     margin-bottom: 20px;
+    color: #2c3e50;
+
 }
+
+h4 {
+    text-align: left;
+    margin-bottom: 20px;
+    color: black;
+}
+
+
+.office-card, .document-card {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+    width: 95%;
+    align-items: center;
+    max-width: 800px;
+}
+
 
 .documents-list {
+    width: 80%;
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+ul {
     list-style: none;
     padding: 0;
-    margin: 0;
 }
 
-.documents-list .document-item {
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-    text-align: left;
-}
 
-.documents-list .document-item h3 {
-    font-size: 18px;
-    margin: 0;
-    color: #333;
-}
-
-.documents-container button {
+.add-document-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 30px;
+    background-color: #f4f4f4;
+    border-radius: 8px;
+    padding: 20px;
     width: 100%;
+    max-width: 600px;
+}
+
+.add-document-card input, .add-document-card select, .add-document-card button {
+    width: 100%;
+    margin: 10px 0;
     padding: 10px;
-    font-size: 16px;
-    color: white;
-    background-color: #007bff;
-    border: none;
     border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+
+.add-btn, .add-dep-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
     cursor: pointer;
+    padding: 10px;
+    width: 100%;
     margin-top: 10px;
+    border-radius: 4px;
 }
 
-.documents-container button:hover {
-    background-color: #0056b3;
+.remove-dep-btn {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    width: 100%;
+    margin-top: 10px;
+    border-radius: 4px;
 }
 
-.documents-container button:disabled {
-    background-color: #cccccc;
-    cursor: not-allowed;
+.delete-btn{
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    width: 30%;
+    margin: 15px;
+    border-radius: 4px;
 }
 
-.documents-container p.no-documents {
-    color: #888;
-    font-style: italic;
+
+.add-btn:hover, .add-dep-btn:hover {
+    background-color: #3498db;
 }
+
+.delete-btn:hover, .remove-dep-btn:hover {
+    background-color: #c0392b;
+}
+
+
+.dependency-section {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.dependency-section label {
+    font-weight: bold;
+    color: #2980b9;
+}
+
+.dependencies-list {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.dependencies-list ul {
+    padding: 0;
+}
+
+.dependencies-list li {
+    margin-bottom: 10px;
+    color: #2980b9;
+    font-weight: bold;
+
+}
+
 

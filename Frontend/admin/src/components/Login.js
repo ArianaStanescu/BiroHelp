@@ -20,14 +20,19 @@ function Login() {
     const handleLogin = (e) => {
         e.preventDefault();
 
-        if (username === 'admin123') {
-            const adminUser = { id: 1, name: 'Admin', username: 'admin123' };
+        if (username.trim().toLowerCase().includes('admin')) {
+            // Crearea unui utilizator admin simulat
+            const adminUser = { id: 1, name: 'Admin', username: username.trim() };
+
+            // Setarea mesajului de bun venit și actualizarea utilizatorului autentificat
             setMessage(`Welcome, ${adminUser.name}!`);
             setAuthenticatedUser(adminUser);
-            localStorage.setItem('authenticatedUser', JSON.stringify(adminUser));
+
+            // Navigarea către pagina principală
             navigate('/');
         } else {
-            setMessage('Access denied. Only "admin123" can log in.');
+            // Setarea mesajului de eroare pentru acces restricționat
+            setMessage('Access denied. Only admin users can log in.');
         }
     };
 
