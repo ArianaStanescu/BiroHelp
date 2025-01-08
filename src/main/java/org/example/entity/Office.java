@@ -13,7 +13,8 @@ public class Office {
 
     private String name;
 
-    @OneToMany(mappedBy = "office", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+
+    @OneToMany(mappedBy = "office", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Counter> counters;
 
 

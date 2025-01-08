@@ -3,8 +3,11 @@ package org.example.service;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.Transient;
 import jakarta.transaction.Transactional;
+import org.example.entity.Client;
+import org.example.entity.Counter;
 import org.example.entity.Document;
 import org.example.entity.Office;
+import org.example.repositories.ClientRepository;
 import org.example.repositories.DocumentRepository;
 import org.example.repositories.OfficeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +17,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+
+
 @Service
 public class DocumentService {
 
     @Autowired
     private DocumentRepository documentRepository;
+
+    @Autowired
+    private ClientRepository clientRepository;
 
     @Autowired
     private OfficeRepository officeRepository;
@@ -82,39 +90,38 @@ public class DocumentService {
         documentRepository.save(document);
     }
 
-    public void delete(Long id) {
-        Optional<Document> optionalDocument = documentRepository.findById(id);
+    @Transactional
+    public void delete(Long documentId) {
+
+        Optional<Document> optionalDocument = documentRepository.findById(documentId);
 
         if (optionalDocument.isPresent()) {
-            Document documentToDelete = optionalDocument.get();
+            Document document = optionalDocument.get();
+            Office office = document.getIssuingOffice();
 
-            deleteDependentDocuments(id, documentToDelete.getNecessaryDocuments().stream()
-                    .map(Document::getId)
-                    .toList());
+            office.getDocumentTypesThatCanBeIssued().remove(document);
 
-            documentRepository.delete(documentToDelete);
+            documentRepository.flush();
+
+            officeRepository.save(office);
+
+            List<Client> clients = clientRepository.findAll();
+
+            for (Client client : clients) {
+                client.removeDocument(document);
+                clientRepository.save(client);
+            }
+
+            clientRepository.flush();
+
+
+
+            documentRepository.delete(document);
         }
+
+
     }
-
-//    public void delete(Long id) {
-//        documentRepository.deleteById(id);
-//    }
-
-//    // Metodă pentru a crea un document cu un birou emis
-//    public Document createDocumentWithOffice(Long officeId, String documentName) {
-//        // Crează documentul
-//        Document document = new Document();
-//        document.setName(documentName);
-//
-//        // Obține biroul emis (verifică dacă există)
-//        Office office = officeRepository.findById(officeId)
-//                .orElseThrow(() -> new RuntimeException("Office not found"));
-//
-//        // Setează biroul emis în document
-//        document.setIssuingOffice(office);
-//
-//        // Salvează documentul în repo
-//        return documentRepository.save(document);
-//    }
-
 }
+
+
+

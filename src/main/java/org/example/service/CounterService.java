@@ -1,6 +1,7 @@
 package org.example.service;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.example.entity.Counter;
 import org.example.entity.Office;
 import org.example.repositories.CounterRepository;
@@ -67,8 +68,22 @@ public class CounterService {
     }
 
 
-
+    @Transactional
     public void delete(Long id) {
-        counterRepository.deleteById(id);
+        Optional<Counter> optionalCounter = counterRepository.findById(id);
+
+        if (optionalCounter.isPresent()) {
+            Counter counter = optionalCounter.get();
+            Office office = counter.getOffice();
+
+            office.getCounters().remove(counter);
+
+            counterRepository.flush();
+
+            officeRepository.save(office);
+
+            counterRepository.delete(counter);
+        }
     }
+
 }

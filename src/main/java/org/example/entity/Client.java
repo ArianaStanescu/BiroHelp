@@ -93,6 +93,22 @@ public class Client implements Runnable {
         return ownedDocuments.contains(doc);
     }
 
+    public void removeDocument(Document doc) {
+
+        if (ownedDocuments.contains(doc)) {
+            ownedDocuments.remove(doc);
+        }
+
+
+        if (requestedDocument.contains(doc)) {
+            requestedDocument.remove(doc);
+        }
+
+
+        clientRepository.save(this);
+    }
+
+
     public void addOwnedDocument(Document doc) {
         ownedDocuments.add(doc);
         if (!requestedDocument.contains(doc)) {

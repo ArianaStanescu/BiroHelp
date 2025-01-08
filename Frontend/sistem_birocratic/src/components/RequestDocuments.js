@@ -7,7 +7,7 @@ function RequestDocuments() {
     const [documents, setDocuments] = useState([]);
     const [requestedDocuments, setRequestedDocuments] = useState([]);
     const [ownedDocuments, setOwnedDocuments] = useState([]);
-    const [selectedDocuments, setSelectedDocuments] = useState([]);
+    const [selectedDocumentIds, setSelectedDocumentIds] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const { authenticatedUser } = useAuth();
     const navigate = useNavigate();
@@ -31,47 +31,44 @@ function RequestDocuments() {
     }, []);
 
     useEffect(() => {
-        const fetchUserDocuments = async () => {
-            try {
-                const response = await fetch(
-                    `http://localhost:8080/clients/${authenticatedUser.id}`
-                );
-                if (response.ok) {
-                    const userData = await response.json();
-                    setOwnedDocuments(userData.ownedDocuments || []);
-                    setRequestedDocuments(userData.requestedDocuments || []);
-                } else {
-                    console.error("Failed to fetch user's documents");
-                }
-            } catch (error) {
-                console.error("Error fetching user's documents:", error);
-            }
-        };
-
         if (authenticatedUser) {
+            const fetchUserDocuments = async () => {
+                try {
+                    const response = await fetch(
+                        `http://localhost:8080/clients/${authenticatedUser.id}`
+                    );
+                    if (response.ok) {
+                        const userData = await response.json();
+                        setOwnedDocuments(userData.ownedDocuments || []);
+                        setRequestedDocuments(userData.requestedDocuments || []);
+                    } else {
+                        console.error("Failed to fetch user's documents");
+                    }
+                } catch (error) {
+                    console.error("Error fetching user's documents:", error);
+                }
+            };
             fetchUserDocuments();
+        } else {
+            navigate("/login");
         }
-    }, [authenticatedUser]);
+    }, [authenticatedUser, navigate]);
 
     const handleAddSelectedDocuments = async () => {
+        const newRequestedDocumentIds = selectedDocumentIds.filter(
+            (id) =>
+                !requestedDocuments.some((doc) => doc.id === id) &&
+                !ownedDocuments.some((doc) => doc.id === id)
+        );
+
+        if (newRequestedDocumentIds.length === 0) {
+            alert("No new valid documents selected.");
+            return;
+        }
+
         try {
-            const newRequestedDocuments = selectedDocuments.filter(
-                (doc) =>
-                    !requestedDocuments.some((d) => d.id === doc.id) &&
-                    !ownedDocuments.some((d) => d.id === doc.id)
-            );
-
-            if (newRequestedDocuments.length === 0) {
-                alert("No new valid documents selected.");
-                return;
-            }
-
-            const updatedRequestedDocuments = [...requestedDocuments, ...newRequestedDocuments];
-            const updatedRequestedDocumentIds = updatedRequestedDocuments.map((doc) => doc.id);
-
-            const updatedOwnedDocumentIds = ownedDocuments.map((doc) => doc.id);
-
-            const patchResponse = await fetch(
+            setIsLoading(true);
+            const response = await fetch(
                 `http://localhost:8080/clients/${authenticatedUser.id}/documents`,
                 {
                     method: "PATCH",
@@ -79,32 +76,26 @@ function RequestDocuments() {
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify({
-                        requestedDocumentIds: updatedRequestedDocumentIds,
-                        ownedDocumentsIds: updatedOwnedDocumentIds,
+                        requestedDocumentIds: newRequestedDocumentIds,
                     }),
                 }
             );
 
-            if (patchResponse.ok) {
-                const updatedUser = await patchResponse.json();
+            if (response.ok) {
+                const updatedUser = await response.json();
                 setRequestedDocuments(updatedUser.requestedDocuments || []);
                 setOwnedDocuments(updatedUser.ownedDocuments || []);
+                setSelectedDocumentIds([]);
                 alert("Selected documents successfully added to your requests.");
-                setSelectedDocuments([]);
             } else {
                 console.error("Failed to update requested documents.");
-                alert("An error occurred while updating your document requests. Please try again.");
+                alert("An error occurred while updating your document requests.");
             }
         } catch (error) {
             console.error("Error updating requested documents:", error);
-            alert("An error occurred while processing your request. Please try again.");
+        } finally {
+            setIsLoading(false);
         }
-    };
-
-    const handleSelectionChange = (event) => {
-        const selectedOptions = Array.from(event.target.selectedOptions);
-        const selectedDocs = selectedOptions.map((option) => JSON.parse(option.value));
-        setSelectedDocuments(selectedDocs);
     };
 
     const handleRequestDocuments = async () => {
@@ -124,15 +115,22 @@ function RequestDocuments() {
                 alert("Successfully submitted your request for documents.");
                 navigate("/finish");
             } else {
-                console.error("Failed to submit document request");
-                alert("Error submitting your document request. Please try again.");
+                alert("Error submitting your document request.");
             }
         } catch (error) {
             console.error("Error while requesting documents:", error);
-            alert("An error occurred. Please try again.");
         } finally {
             setIsLoading(false);
         }
+    };
+
+    const handleDocumentChange = (e) => {
+        const documentId = parseInt(e.target.value, 10);
+        setSelectedDocumentIds((prev) =>
+            prev.includes(documentId)
+                ? prev.filter((id) => id !== documentId)
+                : [...prev, documentId]
+        );
     };
 
     return (
@@ -142,17 +140,20 @@ function RequestDocuments() {
             <div>
                 <label>
                     Select Documents to Add to Your Requests:
-                    <select
-                        multiple
-                        value={selectedDocuments.map((doc) => JSON.stringify(doc))}
-                        onChange={handleSelectionChange}
-                    >
+                    <div className="checkbox-group">
                         {documents.map((doc) => (
-                            <option key={doc.id} value={JSON.stringify(doc)}>
-                                {doc.name} (Issued by: {doc.issuingOffice.name})
-                            </option>
+                            <div key={doc.id} className="checkbox-item">
+                                <label>
+                                    <input
+                                        type="checkbox"
+                                        value={doc.id}
+                                        onChange={handleDocumentChange}
+                                    />
+                                    {doc.name} (Issued by: {doc.issuingOffice.name})
+                                </label>
+                            </div>
                         ))}
-                    </select>
+                    </div>
                 </label>
             </div>
 
